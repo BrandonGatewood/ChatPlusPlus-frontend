@@ -72,12 +72,18 @@ export default function Register() {
                     </button>
                 </div>
 
+                { message && (
+                    <p style={{ color: message.type === "error" ? "red" : "green" }}>
+                        { message.text }
+                    </p>
+                )}
+
                 <button type="submit" className={styles["btn-primary"]}>
                     Register
                 </button>
 
                 <p className={styles["toggle-text"]}>
-                Already have an account? <Link to="/login">Login</Link>
+                    Already have an account? <Link to="/login">Login</Link>
                 </p>
             </form>
         </div>
