@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import styles from "./AuthForm.module.css";
 
 export default function Login() {
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [ message, setMessage ] = useState(null);
 
     const handleSubmit = (e) => {
@@ -30,14 +31,23 @@ export default function Login() {
                     required
                     className={ styles['input'] }
                 />
-                <input 
-                    type="password" 
-                    placeholder="Password"
-                    value={ password }
-                    onChange={ (e) => setPassword(e.target.value) }
-                    required
-                    className={ styles['input'] }
-                />
+<div className={styles["password-wrapper"]}>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className={styles["input"]}
+          />
+          <button
+            type="button"
+            className={styles["toggle-password"]}
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
+        </div>
                 { message && (
                     <p style={{ color: message.type === "error" ? "red" : "green" }}>
                         { message.text }
