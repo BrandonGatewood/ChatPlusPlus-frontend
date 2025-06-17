@@ -54,7 +54,7 @@ html, body, #root {
 
 .auth-links a,
 .toggle-text a {
-  color: #007bff;
+  color: #337dff;
   text-decoration: none;
 }
 
@@ -63,7 +63,7 @@ html, body, #root {
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background-color: #337dff;
   color: white;
   padding: 12px;
   width: 100%;
@@ -78,4 +78,32 @@ html, body, #root {
 .toggle-text {
   font-size: 14px;
   margin: 16px 0;
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  display: block;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-48%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ccc;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
