@@ -31,23 +31,23 @@ export default function Login() {
                     required
                     className={ styles['input'] }
                 />
-<div className={styles["password-wrapper"]}>
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className={styles["input"]}
-          />
-          <button
-            type="button"
-            className={styles["toggle-password"]}
-            onClick={() => setShowPassword((prev) => !prev)}
-          >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
-          </button>
-        </div>
+                <div className={styles["password-wrapper"]}>
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className={styles["input"]}
+                    />
+                    <button
+                    type="button"
+                    className={styles["toggle-password"]}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                </div>
                 { message && (
                     <p style={{ color: message.type === "error" ? "red" : "green" }}>
                         { message.text }
@@ -55,7 +55,7 @@ export default function Login() {
                 )}
 
                 <div className={ styles['auth-links'] }>
-                <a href="#">Forgot password?</a>
+                    <a href="#">Forgot password?</a>
                 </div>
 
                 <button type="submit" className={ styles['btn-primary'] }>Login</button>
