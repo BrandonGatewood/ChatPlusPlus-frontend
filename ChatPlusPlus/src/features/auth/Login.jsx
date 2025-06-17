@@ -23,6 +23,7 @@ export default function Login() {
         <div className={ styles['auth-container'] }>
             <form className={ styles['auth-box'] } onSubmit={ handleSubmit }>
                 <h2>Login</h2>
+
                 <input 
                     type="email" 
                     placeholder="Email"
@@ -31,6 +32,7 @@ export default function Login() {
                     required
                     className={ styles['input'] }
                 />
+
                 <div className={styles["password-wrapper"]}>
                     <input
                         type={showPassword ? "text" : "password"}
@@ -48,6 +50,7 @@ export default function Login() {
                         {showPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
                 </div>
+
                 { message && (
                     <p style={{ color: message.type === "error" ? "red" : "green" }}>
                         { message.text }
