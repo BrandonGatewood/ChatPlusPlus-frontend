@@ -29,11 +29,10 @@ export default function Register() {
             alert("Registration successful!");
         }
         catch(err) {
-            alert("Register failed.");
+            setMessage({ type: "error", text: err.message });
             console.error(err);
         }
 
-        setMessage({ type: "success", text: "Registration successful!" });
     };
 
     return (
