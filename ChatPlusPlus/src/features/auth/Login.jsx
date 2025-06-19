@@ -19,7 +19,7 @@ export default function Login() {
                 password,
             });
 
-            localStorage.setItem("access_token", resizeBy.data.access_token);
+            localStorage.setItem("access_token", res.data.access_token);
             alert("Login successful!");
         }
         catch(err)

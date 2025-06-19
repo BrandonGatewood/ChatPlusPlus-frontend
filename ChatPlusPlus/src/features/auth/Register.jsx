@@ -11,12 +11,26 @@ export default function Register() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [message, setMessage] = useState(null);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
             setMessage({ type: "error", text: "Passwords do not match." });
             return;
+        }
+
+        try {
+            const res = await api.post("/register", {
+                email,
+                password,
+            });
+
+            localStorage.setItem("access_token", res.data.access_token);
+            alert("Registration successful!");
+        }
+        catch(err) {
+            alert("Register failed.");
+            console.error(err);
         }
 
         setMessage({ type: "success", text: "Registration successful!" });
