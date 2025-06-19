@@ -20,11 +20,12 @@ export default function Login() {
             });
 
             localStorage.setItem("access_token", res.data.access_token);
+            // remove once login works
             alert("Login successful!");
         }
         catch(err)
         {
-            alert("Invalid credentials.");
+            setMessage({ type: "error", text: err.message });
             console.error(err);
         }
     };
