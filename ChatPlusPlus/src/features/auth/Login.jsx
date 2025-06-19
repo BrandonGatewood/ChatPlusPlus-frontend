@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import styles from "./AuthForm.module.css";
+import api from "../../api/axios";
 
 export default function Login() {
     const [ email, setEmail ] = useState("");
@@ -9,14 +10,23 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [ message, setMessage ] = useState(null);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Replace with real api call
-        if(email === "test@gmail.com" && password === "password")
-            setMessage({ type: "success", text: "Login successful!" });
-        else
-            setMessage({ type: "error", text: "Invalid credentials." });
+        try {
+            const res = await api.post("/login", {
+                email,
+                password,
+            });
+
+            localStorage.setItem("access_token", resizeBy.data.access_token);
+            alert("Login successful!");
+        }
+        catch(err)
+        {
+            alert("Invalid credentials.");
+            console.error(err);
+        }
     };
 
     return(
