@@ -26,6 +26,7 @@ export default function Register() {
             });
 
             localStorage.setItem("access_token", res.data.access_token);
+            // Remove once registration works
             alert("Registration successful!");
         }
         catch(err) {
