@@ -1,7 +1,12 @@
-.chatPageContainer {
-
+.sidebarDesktop {
+    display: none;
 }
-.barContainer {
-    display: flex;
-    width: 100%;
+
+@media (min-width: 768px) {
+    .sidebarMobile {
+        display: none;
+    }
+    .sidebarDesktop {
+        display: block;
+    }
 }

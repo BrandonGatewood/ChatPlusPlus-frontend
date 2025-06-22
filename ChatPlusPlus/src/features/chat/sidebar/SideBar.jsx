@@ -1,34 +1,25 @@
-import React, { useState } from "react";
-import styles from "./SideBar.module.css";
-import { FiMenu, FiX } from "react-icons/fi"; // feather icons (clean and simple)
+import { useEffect, useState } from "react";
+import SidebarMobile from "./SidebarMobile";
+import SidebarDesktop from "./SidebarDesktop";
+import styles from "./css/Sidebar.module.css";
 
-export default function SideBar() {
-  const [isOpen, setIsOpen] = useState(false);
-    // show sie bar when closed at 768px
-  return (
-    <>
-      {/* Hamburger icon - only show when sidebar is closed */}
-      {!isOpen && (
-        <div
-          className={styles.iconButton}
-          onClick={() => setIsOpen(true)}
-          aria-label="Open sidebar"
-        >
-          <FiMenu size={24} />
-        </div>
-      )}
-      {/* Sidebar */}
-      <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
-        {isOpen && (
-          <div
-            className={styles.closeButton}
-            onClick={() => setIsOpen(false)}
-            aria-label="Close sidebar"
-          >
-            <FiX size={24} />
-          </div>
-        )}
-      </aside>
-    </>
-  );
-}
+// Wrapper component that conditionally renders the correct sidebar based on screen width
+const Sidebar = ({ isOpen, setIsOpen }) => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  // Listen for window resize to update `isMobile` dynamically
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Render mobile or desktop sidebar based on device type
+  return isMobile
+    ? <SidebarMobile isOpen={isOpen} setIsOpen={setIsOpen} />
+    : <SidebarDesktop isOpen={isOpen} setIsOpen={setIsOpen} />;
+};
+
+export default Sidebar;
