@@ -1,5 +1,5 @@
 import { FiMenu, FiX } from "react-icons/fi";
-import styles from "./SidebarDesktop.module.css";
+import styles from "./css/SidebarDesktop.module.css";
 
 // Sidebar for desktop layout (anchored, toggles open/closed)
 const SidebarDesktop = ({ isOpen, setIsOpen }) => {
