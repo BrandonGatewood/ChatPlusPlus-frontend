@@ -1,75 +1,75 @@
 /* Container wraps the whole layout */
 .container {
-  display: flex;
-  position: relative;
-  height: 100vh;
-  overflow-x: hidden; /* Prevent horizontal scroll when sidebar is open */
+    display: flex;
+    position: relative;
+    height: 100vh;
+    overflow-x: hidden; /* Prevent horizontal scroll when sidebar is open */
 }
 
 /* Floating hamburger menu button */
 .menuButton {
 position: fixed;
-  top: 18px; /* vertically center icon inside 60px topbar */
-  left: 1rem;
-  z-index: 1001;
-  background: none;
-  border: none;
-  cursor: pointer; 
+    top: 18px; /* vertically center icon inside 60px topbar */
+    left: 1rem;
+    z-index: 1001;
+    background: none;
+    border: none;
+    cursor: pointer; 
 }
 
 /* Sidebar (hidden by default, slides in when open) */
 .sidebar {
-  position: fixed;
-  top: 0;
-  left: -250px; /* Hide sidebar initially */
-  height: 100%;
-  width: 250px;
-  background-color: #1e1e1e;
-  color: white;
-  transition: left 0.3s ease;
-  z-index: 1000;
-  padding: 1rem;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 0;
+    left: -250px; /* Hide sidebar initially */
+    height: 100%;
+    width: 250px;
+    background-color: #1e1e1e;
+    color: white;
+    transition: left 0.3s ease;
+    z-index: 1000;
+    padding: 1rem;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
 }
 
 /* Sidebar visible state */
 .sidebar.open {
-  left: 0;
+    left: 0;
 }
 
 /* X button to close the menu */
 .closeButton {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  cursor: pointer;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
 }
 
 /* Menu item styling */
 .menuItems {
-  margin-top: 4rem; /* Push menu items down a bit */
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+    margin-top: 4rem; /* Push menu items down a bit */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .menuItems a {
-  color: white;
-  text-decoration: none;
+    color: white;
+    text-decoration: none;
 }
 
 /* Main content section */
 .content {
-  flex: 1;
-  transition: transform 0.3s ease;
-  width: 100%;
+    flex: 1;
+    transition: transform 0.3s ease;
+    width: 100%;
 }
 
 /* Shift content to the right when sidebar is open */
 .shifted {
-  transform: translateX(250px);
+    transform: translateX(250px);
 }
