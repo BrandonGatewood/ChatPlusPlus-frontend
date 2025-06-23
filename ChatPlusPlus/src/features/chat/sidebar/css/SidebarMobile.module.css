@@ -49,17 +49,35 @@ position: fixed;
     cursor: pointer;
 }
 
-/* Menu item styling */
-.menuItems {
-    margin-top: 4rem; /* Push menu items down a bit */
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+/* New chat button styling */
+.newChatButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-top: 3rem; /* spacing below close button */
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
 }
 
-.menuItems a {
-    color: white;
-    text-decoration: none;
+/* Text next to new chat icon */
+.newChatText {
+  white-space: nowrap;
+}
+
+/* Chats title */
+.chatsTitle {
+  margin-top: 2rem;
+  margin-left: 1rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: white;
 }
 
 /* Main content section */
