@@ -1,25 +1,40 @@
-import { FiMenu, FiX } from "react-icons/fi";
+import { useState } from "react";
+import { FiMenu, FiX, FiMessageSquare } from "react-icons/fi";
 import styles from "./css/SidebarDesktop.module.css";
+import TopBar from "../topbar/TopBar";
 
-// Sidebar for desktop layout (anchored, toggles open/closed)
-const SidebarDesktop = ({ isOpen, setIsOpen }) => {
+export default function SidebarDesktop() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => setIsOpen(o => !o);
+
   return (
-    <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
-      {/* Toggle button for opening/closing the sidebar */}
-      <button
-        className={styles.menuButton}
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label="Toggle sidebar"
-      >
-        {/* Switches icon based on sidebar state */}
-        {isOpen ? <FiX size={20} /> : <FiMenu size={20} />}
-      </button>
+    <div className={styles.container}>
+      <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
+        {!isOpen && (
+          <button className={styles.menuButton} onClick={toggleSidebar}>
+            <FiMenu size={24} />
+          </button>
+        )}
+        {isOpen && (
+          <button className={styles.closeButton} onClick={toggleSidebar}>
+            <FiX size={24} />
+          </button>
+        )}
 
-      {/* Navigation links; pushed down to avoid clashing with toggle button */}
-      <nav style={{ marginTop: "4rem" }}>
-      </nav>
-    </aside>
+        <button className={styles.newChatButton}>
+          <FiMessageSquare size={20}/>
+          {isOpen && <span>New chat</span>}
+        </button>
+
+        {isOpen && <h2 className={styles.chatsTitle}>Chats</h2>}
+
+        {isOpen && <div className={styles.chatList}>{/* future chats here */}</div>}
+      </aside>
+
+      <main className={`${styles.content} ${isOpen ? styles.shifted : ""}`}>
+        <TopBar />
+      </main>
+    </div>
   );
-};
-
-export default SidebarDesktop;
+}
