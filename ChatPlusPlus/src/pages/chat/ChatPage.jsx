@@ -1,6 +1,4 @@
 import Sidebar from "../../features/chat/sidebar/Sidebar";
-import styles from "./ChatPage.module.css";
-import TopBar from "../../features/chat/topbar/TopBar";
 import { useState } from "react";
 export default function ChatPage() {
 
