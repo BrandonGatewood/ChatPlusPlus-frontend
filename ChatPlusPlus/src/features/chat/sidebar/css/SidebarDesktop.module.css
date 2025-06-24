@@ -18,14 +18,10 @@
 }
 
 .content {
-  margin-left: 60px;
   flex-grow: 1;
   transition: margin-left 0.3s ease;
 }
 
-.shifted {
-  margin-left: 250px;
-}
 
 /* ========== Menu Buttons ========== */
 /* Container for menu button */
