@@ -1,6 +1,6 @@
 import styles from "./css/SidebarMobile.module.css";
 import { FiMenu, FiX, FiMessageSquare } from "react-icons/fi"; 
-import TopBar from "../topbar/TopBar";
+import ChatMainContent from "../mainContent/MainContent";
 
 export default function SidebarMobile({ isOpen, setIsOpen }) {
     const toggleMenu = () => setIsOpen(prev => !prev); 
@@ -13,21 +13,31 @@ export default function SidebarMobile({ isOpen, setIsOpen }) {
                 </button>
             )} 
 
-            <div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
-                <button className={styles.closeButton} onClick={toggleMenu}>
-                    <FiX size={24} />
-                </button>
+            <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
+                <div className={ styles.closeButtonContainer }>
+                    <button className={styles.closeButton} onClick={toggleMenu}>
+                        <FiX size={24} />
+                    </button>
+                </div>
 
-                <button className={styles.newChatButton}>
-                    <FiMessageSquare size={20} />
-                    <span className={styles.newChatText}>New chat</span>
-                </button>
+                <div className={ styles.newChatButtonContainer }>
+                    <button className={styles.newChatButton}>
+                        <div className={ styles.iconContainer } >
+                            <FiMessageSquare size={20} />
+                        </div>
+                        <h2 className={styles.newChatTitle}>New chat</h2>
+                    </button>
+                </div>
 
-                <h2 className={styles.chatsTitle}>Chats</h2>
-            </div>
+                <div className={ styles.chatsTitleContainer }>
+                    <h2 className={styles.chatsTitle}>Chats</h2>
+                </div>
+
+                <div className={ styles.chatList }></div>
+            </aside>
 
             <div className={`${styles.content} ${isOpen ? styles.shifted : ''}`}>
-                <TopBar /> 
+                <ChatMainContent /> 
             </div>
         </div> 
     );

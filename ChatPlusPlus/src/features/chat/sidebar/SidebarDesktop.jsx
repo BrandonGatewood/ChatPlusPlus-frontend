@@ -13,20 +13,20 @@ export default function SidebarDesktop({ isOpen, setIsOpen }) {
 
                 {/* Menu button (shown when sidebar is closed) */}
                 {!isOpen && (
-                <div className={styles.divider}>
-                    <button className={styles.menuButton} onClick={toggleSidebar}>
-                    <FiMenu size={24} />
-                    </button>
-                </div>
+                    <div className={styles.divider}>
+                        <button className={styles.menuButton} onClick={toggleSidebar}>
+                            <FiMenu size={24} />
+                        </button>
+                    </div>
                 )}
 
                 {/* Close button (shown when sidebar is open) */}
                 {isOpen && (
-                <div className={styles.closeButtonDivider}>
-                    <button className={styles.closeButton} onClick={toggleSidebar}>
-                    <FiX size={24} />
-                    </button>
-                </div>
+                    <div className={styles.closeButtonDivider}>
+                        <button className={styles.closeButton} onClick={toggleSidebar}>
+                            <FiX size={24} />
+                        </button>
+                    </div>
                 )}
 
                 {/* New Chat button (icon always shown, text only when sidebar is open) */}
