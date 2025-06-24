@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./MainContent.module.css";
+import TopBar from "../topbar/TopBar";
 
 export default function MainContent() {
   const [messages, setMessages] = useState([
@@ -23,9 +24,7 @@ export default function MainContent() {
   return (
     <div className={styles.chatMainContainer}>
       {/* Top Bar */}
-      <div className={styles.topBar}>
-        <h2>Your App Name</h2>
-      </div>
+      <TopBar />
 
       {/* Messages */}
       <div className={styles.messages}>
