@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./MainContent.module.css";
 import TopBar from "../topbar/TopBar";
+import { FiPlus, FiArrowUp } from "react-icons/fi"
 
 export default function MainContent() {
   const [messages, setMessages] = useState([
@@ -43,7 +44,7 @@ export default function MainContent() {
       {/* Input row */}
       <div className={styles.inputRow}>
         <label htmlFor="upload-input" className={styles.uploadLabel}>
-          📎
+            <FiPlus size={24} />
         </label>
         <input
           id="upload-input"
@@ -64,7 +65,7 @@ export default function MainContent() {
         />
 
         <button onClick={handleSend} className={styles.sendButton}>
-          Send
+            <FiArrowUp size={24} />
         </button>
       </div>
     </div>
