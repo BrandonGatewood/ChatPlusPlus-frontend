@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import SidebarMobile from "./SidebarMobile";
 import SidebarDesktop from "./SidebarDesktop";
-import styles from "./css/Sidebar.module.css";
 
 // Wrapper component that conditionally renders the correct sidebar based on screen width
 const Sidebar = ({ isOpen, setIsOpen }) => {
