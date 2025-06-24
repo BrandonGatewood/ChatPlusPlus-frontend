@@ -1,10 +1,8 @@
-import { useState } from "react";
 import { FiMenu, FiX, FiMessageSquare } from "react-icons/fi";
 import styles from "./css/SidebarDesktop.module.css";
 import ChatMainContent from "../mainContent/MainContent";
 
-export default function SidebarDesktop() {
-    const [isOpen, setIsOpen] = useState(false);
+export default function SidebarDesktop({ isOpen, setIsOpen }) {
     const toggleSidebar = () => setIsOpen((prev) => !prev);
 
     return (

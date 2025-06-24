@@ -1,10 +1,8 @@
-import { useState } from "react";
 import styles from "./css/SidebarMobile.module.css";
 import { FiMenu, FiX, FiMessageSquare } from "react-icons/fi"; 
 import TopBar from "../topbar/TopBar";
 
-export default function SidebarMobile() {
-    const [isOpen, setIsOpen] = useState(false);
+export default function SidebarMobile({ isOpen, setIsOpen }) {
     const toggleMenu = () => setIsOpen(prev => !prev); 
 
     return (
