@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FiMenu, FiX, FiMessageSquare } from "react-icons/fi";
 import styles from "./css/SidebarDesktop.module.css";
-import TopBar from "../topbar/TopBar";
+import ChatMainContent from "../mainContent/MainContent";
 
 export default function SidebarDesktop() {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +33,7 @@ export default function SidebarDesktop() {
       </aside>
 
       <main className={`${styles.content} ${isOpen ? styles.shifted : ""}`}>
-        <TopBar />
+        <ChatMainContent />
       </main>
     </div>
   );
