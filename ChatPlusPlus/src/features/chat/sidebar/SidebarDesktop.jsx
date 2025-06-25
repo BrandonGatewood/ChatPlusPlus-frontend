@@ -31,7 +31,13 @@ export default function SidebarDesktop({ isOpen, setIsOpen, chats, currentChatId
 
                 {/* New Chat button (icon always shown, text only when sidebar is open) */}
                 <div className={styles.chatButtonOpenDivider}>
-                    <button className={styles.newChatButton} onClick={ onNewChat }>
+                    <button 
+                        className={styles.newChatButton} 
+                        onClick={ () => {
+                            onNewChat();
+                            setIsOpen(false)
+                        }}
+                    >
                         <div className={`${styles.iconContainer} ${isOpen ? styles.open : styles.closed}`}>
                             <FiMessageSquare size={20} />
                         </div>
