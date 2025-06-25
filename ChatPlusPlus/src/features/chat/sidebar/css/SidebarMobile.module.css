@@ -111,16 +111,3 @@
     overflow-y: auto;
     margin-left: 20px;
 }
-
-
-
-/* Main content section */
-.content {
-    flex: 1;
-    width: 100%;
-}
-
-/* Shift content to the right when sidebar is open */
-.shifted {
-    transform: translateX(250px);
-}

@@ -2,7 +2,7 @@ import { FiMenu, FiX, FiMessageSquare } from "react-icons/fi";
 import styles from "./css/SidebarDesktop.module.css";
 import ChatMainContent from "../mainContent/MainContent";
 
-export default function SidebarDesktop({ isOpen, setIsOpen }) {
+export default function SidebarDesktop({ isOpen, setIsOpen, chats, currentChatId, setCurrentChatId, onNewChat }) {
     const toggleSidebar = () => setIsOpen((prev) => !prev);
 
     return (
@@ -31,7 +31,7 @@ export default function SidebarDesktop({ isOpen, setIsOpen }) {
 
                 {/* New Chat button (icon always shown, text only when sidebar is open) */}
                 <div className={styles.chatButtonOpenDivider}>
-                    <button className={styles.newChatButton} onClick={toggleSidebar}>
+                    <button className={styles.newChatButton} onClick={ onNewChat }>
                         <div className={`${styles.iconContainer} ${isOpen ? styles.open : styles.closed}`}>
                             <FiMessageSquare size={20} />
                         </div>
@@ -49,13 +49,25 @@ export default function SidebarDesktop({ isOpen, setIsOpen }) {
                 )}
 
                 {/* Placeholder for future chats (only when open) */}
-                {isOpen && <div className={styles.chatList}>{/* future chats here */}</div>}
+                {isOpen && 
+                    <div className={styles.chatList}>
+                        {chats.map((chat) => (
+                            <div
+                                key={chat.id}
+                                onClick={() => {
+                                    setCurrentChatId(chat.id);
+                                    setIsOpen(false); // Auto-close sidebar on mobile
+                                }}
+                                className={`${styles.chatItem} ${
+                                chat.id === currentChatId ? styles.active : ""
+                                }`}
+                            >
+                                {chat.title}
+                            </div>
+                        ))}
+                    </div>
+                }
             </aside>
-
-            {/* Main content */}
-            <main className={`${styles.content} ${isOpen ? styles.shifted : ""}`}>
-                <ChatMainContent />
-            </main>
         </div>
     );
 }
