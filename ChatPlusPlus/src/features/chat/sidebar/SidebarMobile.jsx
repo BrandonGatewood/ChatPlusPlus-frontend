@@ -35,26 +35,37 @@ export default function SidebarMobile({ isOpen, setIsOpen, chats, currentChatId,
                     </button>
                 </div>
 
-                <div className={ styles.chatsTitleContainer }>
-                    <h2 className={styles.chatsTitle}>Chats</h2>
+
+                { /* Chat history section */ }
+                <div>
+                    <div className={ styles.chatsTitleContainer }>
+                        { /* change classname to chatHistoryTitle */ }
+                        <h2 className={styles.chatsTitle}>Chats</h2>
+                    </div>
+                    
+                    { /* List of all previous chats */ }
+                    <div className={ styles.chatList }>
+                        {/* chat button to open a saved chat */}
+                        { chats.map((chat) => (
+                            <button
+                                key={chat.id}
+                                onClick={() => {
+                                    setCurrentChatId(chat.id);
+                                    setIsOpen(false); 
+                                }}
+                                className={`
+                                    ${ styles.chatItemButton } 
+                                    ${ chat.id === currentChatId ? styles.active : "" }
+                                `}
+                            >
+                                <h4 className={ styles.chatTitle }>
+                                    {chat.title}
+                                </h4>
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
-                <div className={ styles.chatList }>
-                    {chats.map((chat) => (
-                        <div
-                            key={chat.id}
-                            onClick={() => {
-                                setCurrentChatId(chat.id);
-                                setIsOpen(false); // Auto-close sidebar on mobile
-                            }}
-                            className={`${styles.chatItem} ${
-                            chat.id === currentChatId ? styles.active : ""
-                            }`}
-                        >
-                            {chat.title}
-                        </div>
-                    ))}
-                </div>
             </aside>
         </div> 
     );

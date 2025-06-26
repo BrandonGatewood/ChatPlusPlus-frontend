@@ -1,8 +1,6 @@
 /* Container wraps the whole layout */
 .container {
-    display: flex;
-    height: 100vh;
-    overflow-x: hidden; /* Prevent horizontal scroll when sidebar is open */
+   /* Prevent horizontal scroll when sidebar is open */
 }
 
 /* Floating hamburger menu button */
@@ -17,6 +15,8 @@
 
 /* Sidebar (hidden by default, slides in when open) */
 .sidebar {
+  display: flex;
+  flex-direction: column;
     position: fixed;
     left: -250px; /* Hide sidebar initially */
     height: 100vh;
@@ -86,28 +86,48 @@
 }
 
 .newChatTitle {
-    font-weight: 600;
-    font-size: 16px;
     white-space: nowrap;
     margin: 0;
-    margin-left: 8px;
 }
 
 
 /* ========== Chats Section ========== */
 .chatsTitleContainer {
-    margin-top: 2rem;
+    margin-top: 16px;
     margin-left: 20px;
 }
 
 .chatsTitle {
-  font-weight: 600;
-  font-size: 1rem;
   margin: 0;
 }
 
 .chatList {
-    flex-grow: 1;
-    overflow-y: auto;
-    margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 160px);
+  margin-left: 20px;
+  overflow: auto;
+  min-height: 0;
+  padding: 0; 
+}
+
+.chatItemButton {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  padding: 12px 20px;
+  box-sizing: border-box; 
+  margin: 4px 0;
+}
+.chatItemButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.chatTitle {
+  margin: 0;
 }
