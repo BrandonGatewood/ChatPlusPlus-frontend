@@ -49,30 +49,30 @@ export default function SidebarDesktop({ isOpen, setIsOpen, chats, currentChatId
 
                 {/* Chats section title (only when open) */}
                 {isOpen && (
+                <div>
                     <div className={styles.chatsTitleDivider}>
                         <h2 className={styles.chatsTitle}>Chats</h2>
                     </div>
-                )}
-
-                {/* Placeholder for future chats (only when open) */}
-                {isOpen && 
                     <div className={styles.chatList}>
                         {chats.map((chat) => (
-                            <div
-                                key={chat.id}
-                                onClick={() => {
-                                    setCurrentChatId(chat.id);
-                                    setIsOpen(false); // Auto-close sidebar on mobile
-                                }}
-                                className={`${styles.chatItem} ${
-                                chat.id === currentChatId ? styles.active : ""
-                                }`}
+                            <button 
+                                    key={chat.id}
+                                    onClick={() => {
+                                        setCurrentChatId(chat.id);
+                                        setIsOpen(false); // Auto-close sidebar on mobile
+                                    }}
+                                    className={`${styles.chatItemButton} ${
+                                        chat.id === currentChatId ? styles.active : ""
+                                    }`}
                             >
-                                {chat.title}
-                            </div>
+                                <h4 className={ styles.chatTitle }>
+                                    {chat.title}
+                                </h4>
+                            </button>
                         ))}
                     </div>
-                }
+                </div>
+                )}
             </aside>
         </div>
     );

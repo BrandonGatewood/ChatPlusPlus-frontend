@@ -1,16 +1,17 @@
 /* ========== Layout ========== */
 .container {
-  display: flex;
-  height: 100vh;
-  overflow-x: hidden;
+ 
 }
 
 .sidebar {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
   width: 60px;
   background-color: #202123;
   color: white;
   transition: width 0.3s ease;
+  overflow: hidden;
 }
 
 .sidebar.open {
@@ -127,26 +128,54 @@
 }
 
 .newChatTitle {
-  font-weight: 600;
-  font-size: 16px;
   white-space: nowrap;
   margin: 0;
 }
 
 /* ========== Chats Section ========== */
 .chatsTitleDivider {
-  margin-top: 2rem;
+  margin-top: 16px;
   margin-left: 20px;
+  height: 27.5px;
 }
 
 .chatsTitle {
-  font-weight: 600;
-  font-size: 1rem;
   margin: 0;
 }
 
+
+
+
+
 .chatList {
-  flex-grow: 1;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 160px);
   margin-left: 20px;
+  overflow: auto;
+  min-height: 0;
+  padding: 0;
+}
+
+
+.chatItemButton {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  padding: 12px 20px;
+  box-sizing: border-box; 
+  margin: 4px 0;
+}
+
+.chatItemButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.chatTitle {
+  margin: 0;
 }
