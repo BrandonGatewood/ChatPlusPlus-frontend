@@ -70,3 +70,15 @@
   display:flex;
   cursor: pointer;
 }
+
+
+.closeButton {
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  border:none;
+  cursor: pointer;
+  position: absolute;
+  left: 250px;
+  padding: 0;
+}

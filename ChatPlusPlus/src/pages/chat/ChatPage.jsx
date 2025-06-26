@@ -51,7 +51,8 @@ export default function ChatPage() {
                 <MainContent
                     messages={currentChat?.messages || []}
                     addMessage={addMessageToCurrentChat}
-                    isSidebarOpen={isOpen}
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
                 />
             </div>
         </div>

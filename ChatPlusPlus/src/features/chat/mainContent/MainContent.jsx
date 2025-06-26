@@ -3,11 +3,11 @@ import styles from "./MainContent.module.css";
 import TopBar from "../topbar/TopBar";
 import { FiPlus, FiArrowUp } from "react-icons/fi"
 
-export default function MainContent({ messages, addMessage, isSidebarOpen }) {
+export default function MainContent({ messages, addMessage, isOpen, setIsOpen }) {
     const [inputText, setInputText] = useState("");
 
     const containerClass = `${styles.chatMainContainer} ${
-        isSidebarOpen ? styles.shiftedRight : ""
+        isOpen ? styles.shiftedRight : ""
     }`;
 
     function handleSend() {
@@ -67,6 +67,15 @@ export default function MainContent({ messages, addMessage, isSidebarOpen }) {
                     <FiArrowUp size={24} />
                 </button>
             </div>
+
+            {/* MainContent becomes a close button when sidebar is open */}
+            {isOpen && (
+                <button 
+                    className={ styles.closeButton } 
+                    onClick={() => {setIsOpen(false)}}
+                >
+                </button>
+            )} 
         </div>
     );
 }
