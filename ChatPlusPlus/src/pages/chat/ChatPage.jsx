@@ -8,11 +8,6 @@ export default function ChatPage() {
     const [isOpen, setIsOpen] = useState(false); // Controls whether sidebar is open
 
     const [chats, setChats] = useState([
-        {
-            id: 1,
-            title: "Chat 1",
-            messages: [{ id: 101, from: "bot", text: "Hi! How can I help you?" }],
-        },
     ]);
 
     const [currentChatId, setCurrentChatId] = useState(1);
@@ -22,7 +17,7 @@ export default function ChatPage() {
         const newChat = {
             id: newId,
             title: `Chat ${chats.length + 1}`,
-            messages: [{ id: newId + 1, from: "bot", text: "New chat started!" }],
+            messages: [{ id: newId + 1, from: "bot", text: `Chat ${chats.length + 1}` }],
         };
         setChats([...chats, newChat]);
         setCurrentChatId(newId);
