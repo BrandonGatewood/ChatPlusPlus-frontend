@@ -20,7 +20,8 @@
 /* ====== Menu Button ====== */
 .menuButton {
     position: fixed;
-    top: 16px; /* vertically center icon inside 60px topbar */
+    color: white;
+    top: 16px; 
     left: 16px;
     background: none;
     border: none;
