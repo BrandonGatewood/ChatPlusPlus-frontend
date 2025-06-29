@@ -1,19 +1,19 @@
-import styles from "./css/SidebarMobile.module.css";
 import { FiMenu, FiX, FiMessageSquare } from "react-icons/fi"; 
-import ChatMainContent from "../mainContent/MainContent";
+import stylesMobile from "./css/SidebarMobile.module.css";
+import styles from "./css/Sidebar.module.css";
 
 export default function SidebarMobile({ isOpen, setIsOpen, chats, currentChatId, setCurrentChatId, onNewChat }) {
     const toggleMenu = () => setIsOpen(prev => !prev); 
 
     return (
-        <div className={styles.container}>
+        <div>
             {!isOpen && (
-                <button className={styles.menuButton} onClick={toggleMenu}>
+                <button className={stylesMobile.menuButton} onClick={toggleMenu}>
                     <FiMenu size={24} />
                 </button>
             )} 
 
-            <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
+            <aside className={`${stylesMobile.sidebar} ${isOpen ? stylesMobile.open : ''}`}>
                 <div className={ styles.closeButtonContainer }>
                     <button className={styles.closeButton} onClick={toggleMenu}>
                         <FiX size={24} />
@@ -28,7 +28,7 @@ export default function SidebarMobile({ isOpen, setIsOpen, chats, currentChatId,
                             setIsOpen(false);
                         }}
                     >
-                        <div className={ styles.iconContainer } >
+                        <div className={ stylesMobile.newChatIconContainer } >
                             <FiMessageSquare size={20} />
                         </div>
                         <h2 className={styles.newChatTitle}>New chat</h2>
@@ -38,9 +38,9 @@ export default function SidebarMobile({ isOpen, setIsOpen, chats, currentChatId,
 
                 { /* Chat history section */ }
                 <div>
-                    <div className={ styles.chatsTitleContainer }>
+                    <div className={ stylesMobile.chatsTitleContainer }>
                         { /* change classname to chatHistoryTitle */ }
-                        <h2 className={styles.chatsTitle}>Chats</h2>
+                        <h2 className={styles.chatTitle}>Chats</h2>
                     </div>
                     
                     { /* List of all previous chats */ }

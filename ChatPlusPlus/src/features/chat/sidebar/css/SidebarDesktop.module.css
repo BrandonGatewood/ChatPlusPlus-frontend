@@ -1,8 +1,4 @@
-/* ========== Layout ========== */
-.container {
- 
-}
-
+/* ====== Layout ====== */
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -18,9 +14,10 @@
   width: 250px;
 }
 
-/* ========== Menu Buttons ========== */
-/* Container for menu button */
-.divider {
+
+
+/* ====== Menu Button ====== */
+.menuButtonContainer {
   width: 100%;
   height: 30px;
   margin-top: 16px;
@@ -28,8 +25,6 @@
   justify-content: center;
   align-items: center;
 }
-
-/* Menu button itself */
 .menuButton {
   background: none;
   border: none;
@@ -42,69 +37,24 @@
   width: 100%;
 }
 
-.closeButton {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-}
 
-.closeButtonDivider {
-  margin-top: 16px;
-  padding-right: 16px; 
-  width: 100%;
-  height: 30px;
-  display: flex;
-  justify-content: flex-end;
-}
 
-/* ========== New Chat Button ========== */
-.chatButtonOpenDivider,
-.chatButtonCloseDivider {
-  display: flex;
-  margin-top: 16px;
-  width: 100%;
-  height: 30px;
-}
-
-.newChatButton {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  padding: 0 20px;
-  box-sizing: border-box;
-}
-
-.newChatButton:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Icon container adjusts size and alignment */
-.iconContainer {
+/* ========== New Chat Icon Container ========== */
+.newChatIconContainer {
   display: flex;
   align-items: center;
   justify-content: center;
   transition: width 0.3s ease, justify-content 0.3s ease;
 }
-
-.iconContainer.closed {
+.newChatIconContainer.closed {
   width: 100%;
   justify-content: center;
 }
-
-.iconContainer.open {
+.newChatIconContainer.open {
   width: 30px;
   justify-content: flex-start;
 }
 
-/* Text transition */
 .newChatTitleWrapper {
   overflow: hidden;
   display: flex;
@@ -114,67 +64,21 @@
   opacity: 0;
   margin-left: 0;
 }
-
 .visible {
   max-width: 200px;
   opacity: 1;
 }
-
 .hidden {
   max-width: 0;
   opacity: 0;
   margin-left: 0;
 }
 
-.newChatTitle {
-  white-space: nowrap;
-  margin: 0;
-}
+
 
 /* ========== Chats Section ========== */
-.chatsTitleDivider {
+.chatsTitleContainer {
   margin-top: 16px;
   margin-left: 20px;
   height: 27.5px;
-}
-
-.chatsTitle {
-  margin: 0;
-}
-
-
-
-
-
-.chatList {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 160px);
-  margin-left: 20px;
-  overflow: auto;
-  min-height: 0;
-  padding: 0;
-}
-
-
-.chatItemButton {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  background: none;
-  border: none;
-  color: #ccc;
-  cursor: pointer;
-  padding: 12px 20px;
-  box-sizing: border-box; 
-  margin: 4px 0;
-}
-
-.chatItemButton:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-}
-
-.chatTitle {
-  margin: 0;
 }
