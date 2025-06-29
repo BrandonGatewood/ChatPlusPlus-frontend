@@ -5,7 +5,7 @@ import styles from "./ChatPage.module.css";
 
 export default function ChatPage() {
 
-    const [isOpen, setIsOpen] = useState(false); // Controls whether sidebar is open
+    const [isOpen, setIsOpen] = useState(false);
 
     const [chats, setChats] = useState([
     ]);
