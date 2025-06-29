@@ -7,7 +7,6 @@ export default function SidebarDesktop({ isOpen, setIsOpen, chats, currentChatId
 
     return (
         <div>
-
             {/* Sidebar */}
             <aside className={`${stylesDesktop.sidebar} ${isOpen ? stylesDesktop.open : ""}`}>
 

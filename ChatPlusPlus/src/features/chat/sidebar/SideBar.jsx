@@ -41,6 +41,5 @@ export default function Sidebar({ isOpen, setIsOpen, chats, currentChatId, setCu
                 />
             </div>
         </div>
-
     ) ;
 };

@@ -65,7 +65,6 @@ export default function SidebarMobile({ isOpen, setIsOpen, chats, currentChatId,
                         ))}
                     </div>
                 </div>
-
             </aside>
         </div> 
     );
