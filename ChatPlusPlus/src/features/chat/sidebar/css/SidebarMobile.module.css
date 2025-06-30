@@ -6,8 +6,8 @@
     left: -250px;
     height: 100vh;
     width: 250px;
-    background-color: #202123;
-    color: white;
+    background-color: var(--color-sidebar);
+    color: var(--color-primary-text);
     transition: left 0.3s ease;
 }
 
@@ -20,7 +20,7 @@
 /* ====== Menu Button ====== */
 .menuButton {
     position: fixed;
-    color: white;
+    color: var(--color-icon);
     top: 16px; 
     left: 16px;
     background: none;
