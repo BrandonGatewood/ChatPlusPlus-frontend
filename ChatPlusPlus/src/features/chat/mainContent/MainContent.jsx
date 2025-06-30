@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import styles from "./MainContent.module.css";
 import TopBar from "../topbar/TopBar";
 import { FiPlus, FiArrowUp } from "react-icons/fi"
@@ -13,7 +14,7 @@ export default function MainContent({ messages, addMessage, isOpen, setIsOpen })
     function handleSend() {
         if (!inputText.trim()) return;
 
-        addMessage({ id: Date.now(), from: "user", text: inputText });
+        addMessage({ id: uuidv4(), from: "user", text: inputText });
         setInputText("");
     }
 
