@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import Sidebar from "../../features/chat/sidebar/Sidebar";
 import MainContent from "../../features/chat/mainContent/MainContent";
 import styles from "./ChatPage.module.css";
@@ -10,30 +11,50 @@ export default function ChatPage() {
     const [chats, setChats] = useState([
     ]);
 
-    const [currentChatId, setCurrentChatId] = useState(1);
+    const [draftChat, setDraftChat] = useState(() => {
+        const newId = uuidv4();
+        return {
+            id: newId,
+            title: `Generate title`,
+            messages: [{ id: newId + 1, from: "bot", text: "What's on your mind today?" }],
+        };
+    });
+
+    const [currentChatId, setCurrentChatId] = useState(draftChat ? draftChat.id : null);
 
     const handleNewChat = () => {
-        const newId = Date.now();
-        const newChat = {
+        const newId = uuidv4();
+        return {
             id: newId,
-            title: `Chat ${chats.length + 1}`,
-            messages: [{ id: newId + 1, from: "bot", text: `Chat ${chats.length + 1}` }],
+            title: `Generate title`,
+            messages: [{ id: newId + 1, from: "bot", text: "What's on your mind today?" }],
         };
-        setChats([...chats, newChat]);
-        setCurrentChatId(newId);
     };
 
     const addMessageToCurrentChat = (message) => {
-        setChats((prev) =>
-            prev.map((chat) =>
-                chat.id === currentChatId
-                ? { ...chat, messages: [...chat.messages, message] }
-                : chat
-            )
-        );
+        if (draftChat && currentChatId === draftChat.id && !chats.find(chat => chat.id === draftChat.id)) {
+            const updatedDraft = {
+                ...draftChat,
+                messages: [...draftChat.messages, message],
+            };
+            setChats(prev => [...prev, updatedDraft]);
+            setDraftChat(null);
+            setCurrentChatId(updatedDraft.id); 
+        } else {
+            // Existing chat: update messages normally
+            setChats((prev) =>
+                prev.map((chat) =>
+                    chat.id === currentChatId
+                        ? { ...chat, messages: [...chat.messages, message] }
+                        : chat
+                )
+            );
+        } 
     };
 
-    const currentChat = chats.find((chat) => chat.id === currentChatId);
+  const savedChat = chats.find((chat) => chat.id === currentChatId);
+    const currentChat =
+        savedChat || (draftChat?.id === currentChatId ? draftChat : null); 
 
     return (
         <div className={ styles.chatContainer }>
@@ -44,12 +65,13 @@ export default function ChatPage() {
                     chats={chats}
                     currentChatId={currentChatId}
                     setCurrentChatId={setCurrentChatId}
-                    onNewChat={handleNewChat}
+                    onNewChat={handleNewChat()}
                 />
             </div>
             <div className={ styles.mainContentContainer }>
+                
                 <MainContent
-                    messages={currentChat?.messages || []}
+                    messages={currentChat?.messages || [] }
                     addMessage={addMessageToCurrentChat}
                     isOpen={isOpen}
                     setIsOpen={setIsOpen}
