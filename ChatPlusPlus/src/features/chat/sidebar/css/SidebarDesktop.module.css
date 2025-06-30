@@ -4,8 +4,8 @@
   flex-direction: column;
   height: 100vh;
   width: 60px;
-  background-color: #1E1E1E;
-  color: white;
+  background-color: var(--color-sidebar);
+  color: var(--color-primary-text);
   transition: width 0.3s ease;
   overflow: hidden;
 }
@@ -28,7 +28,7 @@
 .menuButton {
   background: none;
   border: none;
-  color: white;
+  color: var(--color-icon);
   cursor: pointer;
   display: flex;
   justify-content: center;
