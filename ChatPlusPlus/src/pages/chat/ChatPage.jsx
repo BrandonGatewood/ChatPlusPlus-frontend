@@ -24,11 +24,13 @@ export default function ChatPage() {
 
     const handleNewChat = () => {
         const newId = uuidv4();
-        return {
+        const newDraft = {
             id: newId,
             title: `Generate title`,
             messages: [{ id: newId + 1, from: "bot", text: "What's on your mind today?" }],
         };
+        setDraftChat(newDraft);
+        setCurrentChatId(newDraft.id);
     };
 
     const addMessageToCurrentChat = (message) => {
@@ -65,7 +67,7 @@ export default function ChatPage() {
                     chats={chats}
                     currentChatId={currentChatId}
                     setCurrentChatId={setCurrentChatId}
-                    onNewChat={handleNewChat()}
+                    onNewChat={handleNewChat}
                 />
             </div>
             <div className={ styles.mainContentContainer }>
