@@ -14,7 +14,7 @@
     align-items: center;
     background: none;
     border: none;
-    color: white;
+    color: var(--color-icon);
     cursor: pointer;
 }
 
@@ -31,13 +31,13 @@
     width: 100%;
     background: none;
     border: none;
-    color: white;
+    color: var(--color-primary-text);
     cursor: pointer;
     padding: 0 20px;
     box-sizing: border-box;
 }
 .newChatButton:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--color-hover);
 }
 
 /* Chat item */
@@ -47,18 +47,18 @@
   width: 100%;
   background: none;
   border: none;
-  color: #ccc;
+  color: var(--color-primary-text);
   cursor: pointer;
   padding: 12px 20px;
   box-sizing: border-box; 
   margin: 4px 0;
 }
 .chatItemButton:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--color-hover);
   border-radius: 8px;
 }
 .chatItemButton.active {
-  background-color: rgba(256, 255, 255, 0.1);
+  background-color: var(--color-hover);
   border-radius: 8px;
 }
 
