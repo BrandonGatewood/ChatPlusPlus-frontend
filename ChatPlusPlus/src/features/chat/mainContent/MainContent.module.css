@@ -28,14 +28,13 @@
 
 .user {
   align-self: flex-end;
-  background-color: #007bff;
-  color: white;
+  background-color: #58A6FF;
+  color: #E0E0E0;
 }
 
 .bot {
   align-self: flex-start;
-  background-color: #e5e5ea;
-  color: black;
+  color: #E0E0E0; 
 }
 
 .inputRow {
@@ -63,7 +62,7 @@
 }
 
 .sendButton {
-  background-color: #007bff;
+  background-color: #58A6FF;
   color: white;
   border: none;
   border-radius: 360px;
