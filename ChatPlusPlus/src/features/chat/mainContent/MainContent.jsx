@@ -1,42 +1,97 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import styles from "./MainContent.module.css";
 import TopBar from "../topbar/TopBar";
-import { FiPlus, FiArrowUp } from "react-icons/fi"
+import { FiPlus, FiArrowUp, FiX } from "react-icons/fi"
 
 export default function MainContent({ messages, addMessage, isOpen, setIsOpen }) {
     const [inputText, setInputText] = useState("");
+    const [attachedFiles, setAttachedFiles] = useState([]);
+    const textareaRef = useRef(null);
+    const messagesEndRef = useRef(null);
 
     const containerClass = `${styles.chatMainContainer} ${
         isOpen ? styles.shiftedRight : ""
     }`;
 
     function handleSend() {
-        if (!inputText.trim()) return;
+        if (!inputText.trim() && !attachedFiles) return;
 
-        addMessage({ id: uuidv4(), from: "user", text: inputText });
-        setInputText("");
+        if (inputText.trim()) {
+            addMessage({ id: uuidv4(), from: "user", text: inputText });
+        }
+
+        if (attachedFiles.length > 0) {
+            attachedFiles.forEach(file => {
+                addMessage({
+                    id: uuidv4(),
+                    from: "user",
+                    text: `Attached file: ${file.name}`
+                });
+            });
+            setAttachedFiles([]); // clear attachments after sending
+        } 
+
+        setInputText(""); 
+        if (textareaRef.current) {
+            textareaRef.current.style.height = "auto";
+        } 
     }
 
     function handleUpload(event) {
         const file = event.target.files[0];
-        if (file)
-            console.log("Uploaded file:", file);
+        if (!file) return;
+
+        const fileName = file.name.toLowerCase();
+        const allowedExtensions = [".pdf", ".docx"];
+        const isValid = allowedExtensions.some((ext) => fileName.endsWith(ext));
+
+        if (!isValid) {
+            alert("Unsupported file type. Please upload a PDF or DOCX file.");
+            event.target.value = ""; 
+            return;
+        }
+
+        setAttachedFiles((prev) => [...prev, file]);
+
+        event.target.value = ""; 
     }
+
+    function handleRemoveAttachment(index) {
+        setAttachedFiles(prev => prev.filter((_, i) => i !== index));
+    }
+
+    function autoResizeTextarea(textarea) {
+        textarea.style.height = "auto";                    // reset height so shrink works too
+        textarea.style.height = textarea.scrollHeight + "px";  // set height to match content
+    }
+
+    function scrollToBottom() {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollTo({
+                top: messagesEndRef.current.scrollHeight,
+                behavior: "smooth",
+            });
+        }
+    }
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     return (
         <div className={styles.chatMainContainer}>
             <TopBar />
 
-            <div className={styles.messages}>
+            <div className={styles.messages} ref={messagesEndRef}>
                 {messages.map(({ id, from, text }) => (
                     <div
                         key={id}
-                        className={`${styles.chatBubble} ${
-                        from === "user" ? styles.user : styles.bot
-                        }`}
+                        className={`${styles.chatBubble} 
+                            ${from === "user" ? styles.user : styles.bot}`
+                        }
                     >
-                    {text}
+                        {text}
                     </div>
                 ))}
             </div>
@@ -51,16 +106,26 @@ export default function MainContent({ messages, addMessage, isOpen, setIsOpen })
                     type="file"
                     className={styles.uploadInput}
                     onChange={handleUpload}
+                    accept=".pdf, .docx, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 />
 
-                <input
+                <textarea
                     type="text"
                     placeholder="Type your message..."
+                    ref={textareaRef}
                     value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
+                    onChange={(e) => {
+                        setInputText(e.target.value);
+                        autoResizeTextarea(e.target);
+                        scrollToBottom();
+                    }}
                     className={styles.textInput}
+                    rows={1}
                     onKeyDown={(e) => {
-                        if (e.key === "Enter") handleSend();
+                        if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSend();
+                        }
                     }}
                 />
 
@@ -77,6 +142,28 @@ export default function MainContent({ messages, addMessage, isOpen, setIsOpen })
                 >
                 </button>
             )} 
+
+            {attachedFiles.length > 0 && (
+                <div className={styles.attachmentsContainer}>
+                    {attachedFiles.map((file, index) => (
+                        <div key={index} className={styles.attachmentPreview}>
+                            <div className={styles.removeAttachmentButtonContainer}>
+                                <button
+                                    type="button"
+                                    onClick={() => handleRemoveAttachment(index)}
+                                    className={styles.removeAttachmentButton}
+                                    aria-label="Remove attached file"
+                                >
+                                <FiX size={16}/> 
+                                </button>
+                            </div>
+                            <p className={styles.attachmentName}>
+                                {file.name}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
