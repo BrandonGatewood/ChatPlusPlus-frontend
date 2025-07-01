@@ -16,7 +16,7 @@ export default function ChatPage() {
         return {
             id: newId,
             title: `Generate title`,
-            messages: [{ id: newId + 1, from: "bot", text: "Please paste the job posting and upload your resume." }],
+            messages: [{ id: newId + 1, from: "bot", text: "Please post the job posting and upload your resume." }],
         };
     });
 
@@ -27,7 +27,7 @@ export default function ChatPage() {
         const newDraft = {
             id: newId,
             title: `Generate title`,
-            messages: [{ id: newId + 1, from: "bot", text: "Please paste the job posting and upload your resume." }],
+            messages: [{ id: newId + 1, from: "bot", text: "Please post the job posting and upload your resume." }],
         };
         setDraftChat(newDraft);
         setCurrentChatId(newDraft.id);
