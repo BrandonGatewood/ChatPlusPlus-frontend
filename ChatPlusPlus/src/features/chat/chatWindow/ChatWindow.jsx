@@ -4,7 +4,7 @@ import styles from "./ChatWindow.module.css";
 import TopBar from "../topbar/TopBar";
 import { FiPlus, FiArrowUp, FiX } from "react-icons/fi"
 
-export default function MainContent({ messages, addMessage, isOpen, setIsOpen }) {
+export default function ChatWindow({ messages, addMessage, isOpen, setIsOpen }) {
     const [inputText, setInputText] = useState("");
     const [attachedFiles, setAttachedFiles] = useState([]);
     const textareaRef = useRef(null);
