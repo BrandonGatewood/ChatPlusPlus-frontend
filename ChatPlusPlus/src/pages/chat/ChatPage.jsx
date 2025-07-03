@@ -1,79 +1,43 @@
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import Sidebar from "../../features/chat/sidebar/Sidebar";
-import MainContent from "../../features/chat/mainContent/MainContent";
+import ChatWindow from "../../features/chat/chatWindow/ChatWindow";
 import styles from "./ChatPage.module.css";
+import useChatManager from "../../features/chat/hooks/useChatManager";
 
+/**
+ * Top-level chat page component.
+ * Renders the sidebar and main content area.
+ * Uses the `useChatManager` hook to manage chat state and actions.
+ */
 export default function ChatPage() {
-
     const [isOpen, setIsOpen] = useState(false);
 
-    const [chats, setChats] = useState([
-    ]);
-
-    const [draftChat, setDraftChat] = useState(() => {
-        const newId = uuidv4();
-        return {
-            id: newId,
-            title: `Generate title`,
-            messages: [{ id: newId + 1, from: "bot", text: "Please post the job posting and upload your resume." }],
-        };
-    });
-
-    const [currentChatId, setCurrentChatId] = useState(draftChat ? draftChat.id : null);
-
-    const handleNewChat = () => {
-        const newId = uuidv4();
-        const newDraft = {
-            id: newId,
-            title: `Generate title`,
-            messages: [{ id: newId + 1, from: "bot", text: "Please post the job posting and upload your resume." }],
-        };
-        setDraftChat(newDraft);
-        setCurrentChatId(newDraft.id);
-    };
-
-    const addMessageToCurrentChat = (message) => {
-        if (draftChat && currentChatId === draftChat.id && !chats.find(chat => chat.id === draftChat.id)) {
-            const updatedDraft = {
-                ...draftChat,
-                messages: [...draftChat.messages, message],
-            };
-            setChats(prev => [...prev, updatedDraft]);
-            setDraftChat(null);
-            setCurrentChatId(updatedDraft.id); 
-        } else {
-            // Existing chat: update messages normally
-            setChats((prev) =>
-                prev.map((chat) =>
-                    chat.id === currentChatId
-                        ? { ...chat, messages: [...chat.messages, message] }
-                        : chat
-                )
-            );
-        } 
-    };
-
-  const savedChat = chats.find((chat) => chat.id === currentChatId);
-    const currentChat =
-        savedChat || (draftChat?.id === currentChatId ? draftChat : null); 
+    // Chat management logic from custom hook
+    const {
+        chats,
+        currentChatId,
+        currentChat,
+        setCurrentChatId,
+        handleNewChat,
+        addMessageToCurrentChat,
+    } = useChatManager();
 
     return (
-        <div className={ styles.chatContainer }>
-            <div>
-                <Sidebar
-                    isOpen={isOpen}
-                    setIsOpen={setIsOpen}
-                    chats={chats}
-                    currentChatId={currentChatId}
-                    setCurrentChatId={setCurrentChatId}
-                    onNewChat={handleNewChat}
-                />
-            </div>
-            <div className={ styles.mainContentContainer }>
-                
-                <MainContent
-                    messages={currentChat?.messages || [] }
+        <div className={styles.chatContainer}>
+            {/* Sidebar component: shows list of chats and new chat button */}
+            <Sidebar
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                chats={chats}
+                currentChatId={currentChatId}
+                setCurrentChatId={setCurrentChatId}
+                onNewChat={handleNewChat}
+            />
+
+            <div className={styles.chatWindowContainer}>
+                {/* Main chat area component: shows messages and input */}
+                <ChatWindow
+                    messages={currentChat?.messages || []}
                     addMessage={addMessageToCurrentChat}
                     isOpen={isOpen}
                     setIsOpen={setIsOpen}
