@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import styles from "./MainContent.module.css";
+import styles from "./ChatWindow.module.css";
 import TopBar from "../topbar/TopBar";
 import { FiPlus, FiArrowUp, FiX } from "react-icons/fi"
 
@@ -9,10 +9,6 @@ export default function MainContent({ messages, addMessage, isOpen, setIsOpen })
     const [attachedFiles, setAttachedFiles] = useState([]);
     const textareaRef = useRef(null);
     const messagesEndRef = useRef(null);
-
-    const containerClass = `${styles.chatMainContainer} ${
-        isOpen ? styles.shiftedRight : ""
-    }`;
 
     function handleSend() {
         if (!inputText.trim() && !attachedFiles) return;
