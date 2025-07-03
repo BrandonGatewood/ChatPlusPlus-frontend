@@ -4,6 +4,7 @@ html, body, #root {
   padding: 0;
 }
 
+
 *,
 *::before,
 *::after {
@@ -13,7 +14,7 @@ html, body, #root {
 .auth-container {
   height: 100vh;
   width: 100vw;
-  background-color: #377dff;
+  background-color: var(--color-primary-button);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,6 +33,7 @@ html, body, #root {
 
 .auth-box h2 {
   margin-bottom: 24px;
+  color: var(--color-primary-button);
 }
 
 .input {
@@ -45,7 +47,7 @@ html, body, #root {
 
 .input:focus {
   outline: none;
-  border-color: #377dff; /* darker blue */
+  border-color: var(--color-primary-button);
 }
 
 .auth-links {
@@ -54,7 +56,7 @@ html, body, #root {
 
 .auth-links a,
 .toggle-text a {
-  color: #337dff;
+  color: var(--color-text-bg);
   text-decoration: none;
 }
 
@@ -63,8 +65,8 @@ html, body, #root {
 }
 
 .btn-primary {
-  background-color: #337dff;
-  color: white;
+  background-color: var(--color-primary-button);
+  color: var(--color-white);
   padding: 12px;
   width: 100%;
   border: none;
@@ -78,6 +80,7 @@ html, body, #root {
 .toggle-text {
   font-size: 14px;
   margin: 16px 0;
+  color: var(--color-secondary-text);
 }
 
 .password-wrapper {
@@ -99,7 +102,7 @@ html, body, #root {
   background: none;
   border: none;
   cursor: pointer;
-  color: #ccc;
+  color: var(--color-secondary-text);
   font-size: 18px;
   line-height: 1;
   padding: 0;
