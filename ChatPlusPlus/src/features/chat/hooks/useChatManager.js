@@ -38,6 +38,29 @@ export default function useChatManager() {
 
     // Tracks which chat is currently open (either a draft or saved chat)
     const [currentChatId, setCurrentChatId] = useState(() => draftChat.id);
+    const [currentChat, setCurrentChat] = useState(null);
+
+    useEffect(() => {
+        async function fetchChatById(id) {
+            try {
+                // If currentChatId equals draftChat.id, use draftChat directly (unsaved)
+                if (currentChatId === draftChat.id) {
+                    setCurrentChat(draftChat);
+                }
+                else {
+                    // Otherwise, fetch saved chat from backend by id
+                    const res = await api.get(`/chats/${currentChatId}`);
+                    setCurrentChat(res.data);
+                }
+            }
+            catch (error) {
+                console.error("Failed to load chat", error);
+                setCurrentChat(null);
+            }
+        }
+
+        fetchChatById(currentChatId);
+    }, [currentChatId, draftChat]);
 
     // Load chats from backend on mount
     useEffect(() => {
@@ -107,8 +130,6 @@ export default function useChatManager() {
     // Finds saved chat matching the current chat ID (if exists)
     const savedChat = chats.find((chat) => chat.id === currentChatId);
 
-    // Determines the current chat: either a saved chat or active draft
-    const currentChat = savedChat || (draftChat?.id === currentChatId ? draftChat : null);
 
     return {
         chats,

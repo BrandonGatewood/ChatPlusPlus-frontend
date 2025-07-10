@@ -80,11 +80,11 @@ export default function ChatWindow({ messages, addMessage, isOpen, setIsOpen }) 
             <TopBar />
 
             <div className={styles.messages} ref={messagesEndRef}>
-                {messages.map(({ id, from, text }) => (
+                {messages.map(({ id, sender, text }) => (
                     <div
                         key={id}
                         className={`${styles.chatBubble} 
-                            ${from === "user" ? styles.user : styles.bot}`
+                            ${sender === "user" ? styles.user : styles.bot}`
                         }
                     >
                         {text}
