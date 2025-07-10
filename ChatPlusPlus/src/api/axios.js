@@ -13,4 +13,32 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+// Global flag to prevent repeated alerts
+let sessionExpiredHandled = false;
+
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        const status = error?.response?.status;
+        const detail = error?.response?.data?.detail || "Something went wrong.";
+
+        if (status === 401 && !sessionExpiredHandled) {
+            sessionExpiredHandled = true;
+
+            alert("Your session has expired. Please log in again.");
+            localStorage.removeItem("access_token");
+
+            // Reload the page to reset the React state and trigger navigation
+            window.location.href = "/login";
+
+            // Optionally reset the flag in a second
+            setTimeout(() => {
+                sessionExpiredHandled = false;
+            }, 1000);
+        }
+
+        return Promise.reject(error);
+    }
+);
+
 export default api;
