@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import styles from "./AuthForm.module.css";
 import api from "../../api/axios";
 
 export default function Register() {
+    const navigate = useNavigate()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -27,12 +28,14 @@ export default function Register() {
             });
 
             localStorage.setItem("access_token", res.data.access_token);
-            // Remove once registration works
-            alert("Registration successful!");
+            navigate("/chats")
         }
         catch(err) {
-            setMessage({ type: "error", text: err.message });
-            console.error(err);
+            if (err.response && err.response.status === 400) {
+                setMessage({ type: "error", text: err.response.data.detail });
+            } else { 
+                setMessage({ type: "error", text: err.message });
+            }
         }
 
     };
