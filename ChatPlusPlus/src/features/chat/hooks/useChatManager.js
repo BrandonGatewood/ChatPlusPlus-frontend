@@ -21,15 +21,11 @@ function createNewDraft() {
     };
 }
 
-function handleApiError(err, fallbackMessage = "Something went wrong.", navigate) {
+function handleApiError(err, fallbackMessage = "Something went wrong.") {
     const status = err?.response?.status;
     const detail = err?.response?.data?.detail || fallbackMessage;
 
-    if (status === 401) {
-        alert("Your session has expired. Please log in again.");
-        localStorage.removeItem("access_token");
-        if (navigate) navigate("/login");
-    } else {
+    if (status !== 401) {
         alert(detail);
     } 
 }
