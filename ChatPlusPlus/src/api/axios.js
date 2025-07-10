@@ -20,9 +20,10 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         const status = error?.response?.status;
-        const detail = error?.response?.data?.detail || "Something went wrong.";
+        const token = localStorage.getItem("access_token");
 
-        if (status === 401 && !sessionExpiredHandled) {
+        // Only trigger session expired logic if token exists
+        if (status === 401 && token && !sessionExpiredHandled) {
             sessionExpiredHandled = true;
 
             alert("Your session has expired. Please log in again.");
