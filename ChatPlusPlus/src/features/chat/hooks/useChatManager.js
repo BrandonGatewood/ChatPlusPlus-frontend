@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-
+import api from "../../../api/axios";
+import { useNavigate } from "react-router-dom";
 /**
  * Utility function to create a new draft chat object
  * with a unique ID and a default welcome message.
@@ -28,6 +29,7 @@ function createNewDraft() {
  * - Provides functions to start new chats and add messages
  */
 export default function useChatManager() {
+    const navigate = useNavigate()
     // List of saved chats (excluding current draft)
     const [chats, setChats] = useState([]);
     
@@ -36,6 +38,27 @@ export default function useChatManager() {
 
     // Tracks which chat is currently open (either a draft or saved chat)
     const [currentChatId, setCurrentChatId] = useState(() => draftChat.id);
+
+    // Load chats from backend on mount
+    useEffect(() => {
+        async function fetchChats() {
+            try {
+                const res = await api.get("/chats");
+                setChats(res.data);
+            } catch (error) {
+                if (error.response?.status === 401) {
+                    alert("Your session has expired. Please log in again.");
+                    localStorage.removeItem("access_token");
+                    navigate("/login"); // redirect to login
+                }
+                else {
+                    alert("Failed to load chats. Please try again later.");
+                    console.error("Error loading chats:", error);
+                }
+            }
+        }
+        fetchChats();
+    }, []); 
 
     /**
      * Starts a new chat by creating a new draft,
@@ -46,6 +69,7 @@ export default function useChatManager() {
         setDraftChat(newDraft);
         setCurrentChatId(newDraft.id);
     };
+
     /**
      * Adds a message to the current chat:
      * - If it's the first message in a draft, saves it as a new chat.
