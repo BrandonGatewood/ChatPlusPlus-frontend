@@ -1,0 +1,18 @@
+.chatBubble {
+  padding: 0.75rem 1rem;
+  border-radius: 20px;
+  max-width: 60%;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.user {
+  align-self: flex-end;
+  background-color: var(--color-text-bg);
+  color: var(--color-primary-text);
+}
+
+.bot {
+  align-self: flex-start;
+  color: var(--color-primary-text); 
+}

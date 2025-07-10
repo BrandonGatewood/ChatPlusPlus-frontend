@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 import api from "../../../api/axios";
 import { useNavigate } from "react-router-dom";
@@ -13,13 +13,27 @@ function createNewDraft() {
         title: `Generate title`,
         messages: [
             {
-                id: newId + 1,
+                id: uuidv4(),
                 from: "bot",
                 text: "Please post the job posting and upload your resume.",
             },
         ],
     };
 }
+
+function handleApiError(err, fallbackMessage = "Something went wrong.", navigate) {
+    const status = err?.response?.status;
+    const detail = err?.response?.data?.detail || fallbackMessage;
+
+    if (status === 401) {
+        alert("Your session has expired. Please log in again.");
+        localStorage.removeItem("access_token");
+        if (navigate) navigate("/login");
+    } else {
+        alert(detail);
+    } 
+}
+
 
 /**
  * Custom hook that encapsulates all chat management logic:
@@ -53,14 +67,14 @@ export default function useChatManager() {
                     setCurrentChat(res.data);
                 }
             }
-            catch (error) {
-                console.error("Failed to load chat", error);
-                setCurrentChat(null);
+            catch (err) {
+                handleApiError(err, "Failed to load chat.", navigate);
+                setCurrentChat(null); // optional 
             }
         }
 
         fetchChatById(currentChatId);
-    }, [currentChatId, draftChat]);
+    }, [currentChatId, draftChat.id]);
 
     // Load chats from backend on mount
     useEffect(() => {
@@ -68,67 +82,86 @@ export default function useChatManager() {
             try {
                 const res = await api.get("/chats");
                 setChats(res.data);
-            } catch (error) {
-                if (error.response?.status === 401) {
-                    alert("Your session has expired. Please log in again.");
-                    localStorage.removeItem("access_token");
-                    navigate("/login"); // redirect to login
-                }
-                else {
-                    alert("Failed to load chats. Please try again later.");
-                    console.error("Error loading chats:", error);
-                }
+            } catch (err) {
+                handleApiError(err, "Failed to load chats.", navigate); 
             }
         }
         fetchChats();
     }, []); 
 
-    /**
-     * Starts a new chat by creating a new draft,
-     * setting it as the current chat.
-     */
-    const handleNewChat = () => {
-        const newDraft = createNewDraft();
-        setDraftChat(newDraft);
-        setCurrentChatId(newDraft.id);
-    };
-
+   
     /**
      * Adds a message to the current chat:
      * - If it's the first message in a draft, saves it as a new chat.
      * - Otherwise, appends the message to the existing chat.
     */
-    const addMessageToCurrentChat = (message) => {
+    const addMessageToCurrentChat = useCallback(async (message_request, files_request) => {
         if (!currentChatId) return; // guard: no active chat selected
 
-        // If current chat is still a draft and not saved yet
+        const formData = new FormData();
+        formData.append("message_request", message_request); 
+
+        files_request = files_request || [];
+        files_request.forEach((file) => {
+            formData.append("files_request", file);
+        });
+        // Save draftChat to the db 
         if (
             draftChat &&
             currentChatId === draftChat.id &&
             !chats.find((chat) => chat.id === draftChat.id)
         ) {
-            // First message in new draft: save draft to chats
-            const updatedDraft = {
-                ...draftChat,
-                messages: [...draftChat.messages, message],
-            };
-            setChats((prev) => [...prev, updatedDraft]);
-            setDraftChat(null);
-            setCurrentChatId(updatedDraft.id);
-        } else {
-            // Add message to existing saved chat
-            setChats((prev) =>
-                prev.map((chat) =>
-                chat.id === currentChatId
-                    ? { ...chat, messages: [...chat.messages, message] }
-                    : chat
-                )
-            );
-        }
-    };
 
-    // Finds saved chat matching the current chat ID (if exists)
-    const savedChat = chats.find((chat) => chat.id === currentChatId);
+            try {
+                /*
+                    this doesnt need full chat response either.
+                */
+                const res = await api.post("/chats/", formData);
+                
+                const chatTitle = {
+                    id: res.data.id,
+                    title: res.data.title
+                }
+                // Optimistically update chats with created chat from backend
+                setChats(prev => [chatTitle, ...prev]);
+                setCurrentChatId(chatTitle.id); 
+
+                // Now open WebSocket for streaming LLM response using createdChat.id
+                //openLLMWebSocket(createdChat.id);
+            }
+            catch(err) {
+                handleApiError(err, "Failed to send message.", navigate);
+            }
+        }
+        else {
+            try {
+                const res = await api.post(`/chats/${currentChatId}`, formData)
+
+                const message_responses = res.data
+                setCurrentChat(prev => ({
+                    ...prev,
+                    messages: [...prev.messages, ...message_responses]
+                }));
+
+                // Now open WebSocket for streaming LLM response using createdChat.id
+                //openLLMWebSocket(createdChat.id);
+            }
+            catch(err) {
+                handleApiError(err, "Failed to send message.", navigate); 
+            }
+        }
+    }, [currentChatId, draftChat, chats, navigate]);
+
+
+    /**
+     * Starts a new chat by creating a new draft,
+     * setting it as the current chat.
+     */
+    const handleNewChat = useCallback(() => {
+        const newDraft = createNewDraft();
+        setDraftChat(newDraft);
+        setCurrentChatId(newDraft.id);
+    }, []);
 
 
     return {

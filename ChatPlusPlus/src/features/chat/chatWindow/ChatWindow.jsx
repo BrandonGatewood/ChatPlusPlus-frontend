@@ -1,105 +1,89 @@
-import { useState, useRef, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useState, useRef, useEffect, useCallback } from "react";
 import styles from "./ChatWindow.module.css";
 import TopBar from "../topbar/TopBar";
+import MessagesList from "./MessagesList";
 import { FiPlus, FiArrowUp, FiX } from "react-icons/fi"
+
+const ALLOWED_EXTENSIONS = [".pdf", ".docx"];
+
+function filterAllowedFiles(files) {
+    return files.filter(file => {
+        const fileName = file.name.toLowerCase();
+        return ALLOWED_EXTENSIONS.some(ext => fileName.endsWith(ext));
+    });
+}
 
 export default function ChatWindow({ messages, addMessage, isOpen, setIsOpen }) {
     const [inputText, setInputText] = useState("");
     const [attachedFiles, setAttachedFiles] = useState([]);
     const textareaRef = useRef(null);
     const messagesEndRef = useRef(null);
+    const [isSending, setIsSending] = useState(false);
 
-    function handleSend() {
-        if (!inputText.trim() && !attachedFiles) return;
+    async function handleSend() {
+       if (isSending || (!inputText.trim() && attachedFiles.length === 0)) return;
 
-        if (inputText.trim()) {
-            addMessage({ id: uuidv4(), from: "user", text: inputText });
-        }
-
-        if (attachedFiles.length > 0) {
-            attachedFiles.forEach(file => {
-                addMessage({
-                    id: uuidv4(),
-                    from: "user",
-                    text: `Attached file: ${file.name}`
-                });
-            });
-            setAttachedFiles([]); // clear attachments after sending
-        } 
-
-        setInputText(""); 
-        if (textareaRef.current) {
-            textareaRef.current.style.height = "auto";
-        } 
+        setIsSending(true);
+        await addMessage(inputText, attachedFiles);
+        setAttachedFiles([]);
+        setInputText("");
+        if (textareaRef.current) textareaRef.current.style.height = "auto";
+        setIsSending(false); 
     }
 
     function handleUpload(event) {
-        const file = event.target.files[0];
-        if (!file) return;
+        const files = Array.from(event.target.files);
+        const validFiles = filterAllowedFiles(files);
 
-        const fileName = file.name.toLowerCase();
-        const allowedExtensions = [".pdf", ".docx"];
-        const isValid = allowedExtensions.some((ext) => fileName.endsWith(ext));
-
-        if (!isValid) {
-            alert("Unsupported file type. Please upload a PDF or DOCX file.");
-            event.target.value = ""; 
-            return;
+        if (validFiles.length !== files.length) {
+            alert("Only PDF or DOCX files are allowed. Some files were ignored.");
         }
-
-        setAttachedFiles((prev) => [...prev, file]);
-
-        event.target.value = ""; 
-    }
+        setAttachedFiles(prev => [...prev, ...validFiles]);
+        event.target.value = "";
+    } 
 
     function handleRemoveAttachment(index) {
         setAttachedFiles(prev => prev.filter((_, i) => i !== index));
     }
 
-    function autoResizeTextarea(textarea) {
+    const autoResizeTextarea = useCallback((textarea) => {
         textarea.style.height = "auto";                    // reset height so shrink works too
         textarea.style.height = textarea.scrollHeight + "px";  // set height to match content
-    }
+    }, []);
 
-    function scrollToBottom() {
+    function scrollMessagesToBottom() {
         if (messagesEndRef.current) {
-            messagesEndRef.current.scrollTo({
-                top: messagesEndRef.current.scrollHeight,
-                behavior: "smooth",
-            });
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
     }
 
     useEffect(() => {
-        scrollToBottom();
+        scrollMessagesToBottom();
     }, [messages]);
 
     return (
         <div className={styles.chatMainContainer}>
             <TopBar />
 
-            <div className={styles.messages} ref={messagesEndRef}>
-                {messages.map(({ id, sender, text }) => (
-                    <div
-                        key={id}
-                        className={`${styles.chatBubble} 
-                            ${sender === "user" ? styles.user : styles.bot}`
-                        }
-                    >
-                        {text}
-                    </div>
-                ))}
+            <div className={styles.messages}>
+                <MessagesList messages={messages} /> 
+                <div ref={messagesEndRef} />
             </div>
 
             <div className={styles.inputRow}>
-                <label htmlFor="upload-input" className={styles.uploadLabel}>
+                <label 
+                    htmlFor="upload-input" 
+                    className={styles.uploadLabel}
+                    aria-label="Upload file"
+                    title="Upload file" 
+                >
                     <FiPlus size={24} />
                 </label>
 
                 <input
                     id="upload-input"
                     type="file"
+                    multiple
                     className={styles.uploadInput}
                     onChange={handleUpload}
                     accept=".pdf, .docx, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -113,7 +97,7 @@ export default function ChatWindow({ messages, addMessage, isOpen, setIsOpen }) 
                     onChange={(e) => {
                         setInputText(e.target.value);
                         autoResizeTextarea(e.target);
-                        scrollToBottom();
+                        scrollMessagesToBottom();
                     }}
                     className={styles.textInput}
                     rows={1}
@@ -125,7 +109,12 @@ export default function ChatWindow({ messages, addMessage, isOpen, setIsOpen }) 
                     }}
                 />
 
-                <button onClick={handleSend} className={styles.sendButton}>
+                <button 
+                    onClick={handleSend} 
+                    className={styles.sendButton}
+                    aria-label="Send message"
+                    disabled={isSending || (!inputText.trim() && attachedFiles.length === 0)} 
+                >
                     <FiArrowUp size={24} />
                 </button>
             </div>
@@ -135,6 +124,7 @@ export default function ChatWindow({ messages, addMessage, isOpen, setIsOpen }) 
                 <button 
                     className={ styles.closeButton } 
                     onClick={() => {setIsOpen(false)}}
+                    aria-label="Close sidebar"
                 >
                 </button>
             )} 
@@ -153,7 +143,7 @@ export default function ChatWindow({ messages, addMessage, isOpen, setIsOpen }) 
                                 <FiX size={16}/> 
                                 </button>
                             </div>
-                            <p className={styles.attachmentName}>
+                            <p className={styles.attachmentName} title={file.name}>
                                 {file.name}
                             </p>
                         </div>
