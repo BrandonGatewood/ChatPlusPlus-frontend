@@ -49,6 +49,11 @@
   border: 1px solid transparent;
   outline: none;
 }
+textarea::placeholder {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 
 .sendButton {
