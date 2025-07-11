@@ -20,7 +20,6 @@ export default function ChatPage() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
-
         <MainLayout
             isOpen={isSidebarOpen}
             setIsOpen={setIsSidebarOpen}
@@ -29,11 +28,11 @@ export default function ChatPage() {
             setCurrentChatId={setCurrentChatId}
             onNewChat={handleNewChat}
         >
-            <ChatWindow 
+            <ChatWindow
                 messages={currentChat?.messages || []}
                 addMessage={addMessageToCurrentChat}
                 isOpen={isSidebarOpen}
-                setIsOpen={setIsSidebarOpen} 
+                setIsOpen={setIsSidebarOpen}
             />
         </MainLayout>
     );
