@@ -90,8 +90,9 @@ export default function ChatWindow({ messages, addMessage, isOpen, setIsOpen }) 
                 />
 
                 <textarea
-                    type="text"
-                    placeholder="Type your message..."
+                    id="chat-input"
+                    name="chat-input"
+                    placeholder="Enter anything"
                     ref={textareaRef}
                     value={inputText}
                     onChange={(e) => {
