@@ -1,4 +1,5 @@
-import styles from "../css/Sidebar.module.css";
+import styles from "../css/ChatList.module.css"
+import { FiMoreHorizontal } from "react-icons/fi";
 
 export default function ChatList({ chats, currentChatId, onSelect }) {
   return (
@@ -9,7 +10,10 @@ export default function ChatList({ chats, currentChatId, onSelect }) {
           onClick={() => onSelect(chat.id)}
           className={`${styles.chatItemButton} ${chat.id === currentChatId ? styles.active : ""}`}
         >
-          <h4 className={styles.chatTitle}>{chat.title}</h4>
+          <div className={styles.chatItemContent}>
+            <h4 className={styles.chatItemTitle}>{chat.title}</h4>
+            <FiMoreHorizontal className={styles.chatMoreIcon} size={16} />
+          </div> 
         </button>
       ))}
     </div>
