@@ -1,4 +1,3 @@
-/* ====== Layout ====== */
 .sidebar {
   	display: flex;
   	flex-direction: column;
@@ -10,14 +9,10 @@
     color: var(--color-primary-text);
     transition: left 0.3s ease;
 }
-
 .sidebar.open {
     left: 0;
 }
 
-
-
-/* ====== Menu Button ====== */
 .menuButton {
     position: fixed;
     color: var(--color-icon);
@@ -28,9 +23,6 @@
     cursor: pointer; 
 }
 
-
-
-/* ========== New Chat Icon Container ========== */
 .newChatIconContainer {
   display: flex;
   align-items: center;
@@ -38,10 +30,11 @@
   width: 30px;
 }
 
-
-
-/* ========== Chats Section ========== */
 .chatsTitleContainer {
     margin-top: 16px;
     margin-left: 20px;
+}
+
+.chatTitle {
+    margin: 0;
 }
