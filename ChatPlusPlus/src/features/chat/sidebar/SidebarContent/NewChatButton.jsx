@@ -1,5 +1,5 @@
 import { FiMessageSquare } from "react-icons/fi";
-import styles from "../css/Sidebar.module.css";
+import styles from "../css/NewChatButton.module.css";
 
 export default function NewChatButton({ onClick, iconClass = "", titleClass = "" }) {
   return (
