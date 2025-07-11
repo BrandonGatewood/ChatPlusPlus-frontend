@@ -11,6 +11,7 @@ export default function SidebarMobile({
     currentChatId,
     setCurrentChatId,
     onNewChat,
+    handleDelete,
 }) {
     const toggleSidebar = () => setIsOpen((prev) => !prev);
 
@@ -41,6 +42,7 @@ export default function SidebarMobile({
                         setCurrentChatId(id);
                         setIsOpen(false);
                     }}
+                    handleDelete={handleDelete}
                 />
             </aside>
         </>

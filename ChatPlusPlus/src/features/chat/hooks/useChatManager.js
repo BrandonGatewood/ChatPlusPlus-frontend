@@ -156,6 +156,21 @@ export default function useChatManager() {
         setCurrentChatId(newDraft.id);
     }, []);
 
+    const handleDelete = useCallback(
+        async (chat_id) => {
+            try {
+                await api.delete(`/chats/${chat_id}`);
+                if (chat_id === currentChatId) handleNewChat();
+                setChats((chats) =>
+                    chats.filter((chat) => chat.id !== chat_id)
+                );
+            } catch (err) {
+                handleApiError(err, "Failed to send message.", navigate);
+            }
+        },
+        [currentChatId, handleNewChat]
+    );
+
     return {
         chats,
         draftChat,
@@ -164,5 +179,6 @@ export default function useChatManager() {
         setCurrentChatId,
         handleNewChat,
         addMessageToCurrentChat,
+        handleDelete,
     };
 }

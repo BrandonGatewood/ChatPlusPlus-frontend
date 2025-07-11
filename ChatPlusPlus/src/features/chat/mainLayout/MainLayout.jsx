@@ -9,6 +9,7 @@ export default function MainLayout({
     currentChatId,
     setCurrentChatId,
     onNewChat,
+    handleDelete,
     children,
 }) {
     const isMobile = useIsMobile();
@@ -22,6 +23,7 @@ export default function MainLayout({
                 currentChatId={currentChatId}
                 setCurrentChatId={setCurrentChatId}
                 onNewChat={onNewChat}
+                handleDelete={handleDelete}
             />
             <main
                 className={`${styles.mainContent} ${

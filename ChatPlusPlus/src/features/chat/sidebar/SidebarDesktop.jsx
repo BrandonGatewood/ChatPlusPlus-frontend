@@ -11,6 +11,7 @@ export default function SidebarDesktop({
     currentChatId,
     setCurrentChatId,
     onNewChat,
+    handleDelete,
 }) {
     const toggleSidebar = () => setIsOpen((prev) => !prev);
 
@@ -60,6 +61,9 @@ export default function SidebarDesktop({
                         onSelect={(id) => {
                             setCurrentChatId(id);
                             setIsOpen(false);
+                        }}
+                        handleDelete={(id) => {
+                            handleDelete(id);
                         }}
                     />
                 </>

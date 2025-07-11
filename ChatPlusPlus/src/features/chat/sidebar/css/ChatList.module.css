@@ -46,7 +46,24 @@
     text-align: left;
 }
 
+.chatMoreButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    margin-left: auto;
+}
+.chatItemButton:hover .chatMoreButton {
+    opacity: 1;
+}
+
 .chatMoreIcon {
+    color: var(--color-white);
     opacity: 0;
     transition: opacity 0.2s ease;
     flex-shrink: 0;

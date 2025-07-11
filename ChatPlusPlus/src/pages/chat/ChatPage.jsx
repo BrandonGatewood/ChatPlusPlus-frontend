@@ -16,6 +16,7 @@ export default function ChatPage() {
         handleNewChat,
         currentChat,
         addMessageToCurrentChat,
+        handleDelete,
     } = useChatManager();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -27,6 +28,7 @@ export default function ChatPage() {
             currentChatId={currentChatId}
             setCurrentChatId={setCurrentChatId}
             onNewChat={handleNewChat}
+            handleDelete={handleDelete}
         >
             <ChatWindow
                 messages={currentChat?.messages || []}
