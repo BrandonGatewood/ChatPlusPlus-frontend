@@ -1,6 +1,5 @@
 import { FiMenu } from "react-icons/fi";
-import styles from "./css/Sidebar.module.css";
-import stylesDesktop from "./css/SidebarDesktop.module.css";
+import styles from "./css/SidebarDesktop.module.css";
 import CloseButton from "./SidebarContent/ClosedButton";
 import NewChatButton from "./SidebarContent/NewChatButton";
 import ChatList from "./SidebarContent/ChatList";
@@ -9,10 +8,10 @@ export default function SidebarDesktop({ isOpen, setIsOpen, chats, currentChatId
   const toggleSidebar = () => setIsOpen((prev) => !prev);
 
   return (
-    <aside className={`${stylesDesktop.sidebar} ${isOpen ? stylesDesktop.open : ""}`}>
+    <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
       {!isOpen && (
-        <div className={stylesDesktop.menuButtonContainer}>
-          <button className={stylesDesktop.menuButton} onClick={toggleSidebar}>
+        <div className={styles.menuButtonContainer}>
+          <button className={styles.menuButton} onClick={toggleSidebar}>
             <FiMenu size={24} />
           </button>
         </div>
@@ -23,8 +22,8 @@ export default function SidebarDesktop({ isOpen, setIsOpen, chats, currentChatId
                 onNewChat();
                 setIsOpen(false);
               }}
-              iconClass={`${stylesDesktop.newChatIconContainer} ${stylesDesktop.open}`}
-              titleClass={`${stylesDesktop.newChatTitleWrapper} ${stylesDesktop.visible}`}
+              iconClass={`${styles.newChatIconContainer} ${styles.open}`}
+              titleClass={`${styles.newChatTitleWrapper} ${styles.visible}`}
             />
             )}
 
@@ -37,11 +36,11 @@ export default function SidebarDesktop({ isOpen, setIsOpen, chats, currentChatId
               onNewChat();
               setIsOpen(false);
             }}
-            iconClass={`${stylesDesktop.newChatIconContainer} ${stylesDesktop.open}`}
-            titleClass={`${stylesDesktop.newChatTitleWrapper} ${stylesDesktop.visible}`}
+            iconClass={`${styles.newChatIconContainer} ${styles.open}`}
+            titleClass={`${styles.newChatTitleWrapper} ${styles.visible}`}
           />
 
-          <div className={stylesDesktop.chatsTitleContainer}>
+          <div className={styles.chatsTitleContainer}>
             <h2 className={styles.chatTitle}>Chats</h2>
           </div>
 
