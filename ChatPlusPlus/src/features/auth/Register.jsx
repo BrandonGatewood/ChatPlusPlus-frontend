@@ -5,7 +5,7 @@ import styles from "./AuthForm.module.css";
 import api from "../../api/axios";
 
 export default function Register() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [message, setMessage] = useState(null);
@@ -15,7 +15,7 @@ export default function Register() {
         password: "",
         confirmPassword: "",
     });
-    
+
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
         if (message) setMessage(null);
@@ -31,7 +31,7 @@ export default function Register() {
             setLoading(false);
             return;
         }
-  
+
         try {
             const res = await api.post("/register", {
                 email: form.email,
@@ -42,9 +42,11 @@ export default function Register() {
             setForm({ email: "", password: "", confirmPassword: "" });
 
             navigate("/chats");
-        }
-        catch (err) {
-            const msg = err?.response?.data?.detail || err.message || "Unexpected error";
+        } catch (err) {
+            const msg =
+                err?.response?.data?.detail ||
+                err.message ||
+                "Unexpected error";
             setMessage({ type: "error", text: msg });
         } finally {
             setLoading(false);
@@ -83,7 +85,9 @@ export default function Register() {
                         type="button"
                         className={styles["toggle-password"]}
                         onClick={() => setShowPassword((prev) => !prev)}
-                        aria-label={showPassword ? "Hide password" : "Show password"}
+                        aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                        }
                     >
                         {showPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
@@ -99,25 +103,36 @@ export default function Register() {
                         onChange={handleChange}
                         required
                         className={styles["input"]}
-                        
                     />
                     <button
                         type="button"
                         className={styles["toggle-password"]}
                         onClick={() => setShowConfirmPassword((prev) => !prev)}
-                        aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                        aria-label={
+                            showConfirmPassword
+                                ? "Hide confirm password"
+                                : "Show confirm password"
+                        }
                     >
                         {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
                 </div>
 
-                { message && (
-                    <p style={{ color: message.type === "error" ? "red" : "green" }}>
-                        { message.text }
+                {message && (
+                    <p
+                        style={{
+                            color: message.type === "error" ? "red" : "green",
+                        }}
+                    >
+                        {message.text}
                     </p>
                 )}
 
-                <button type="submit" className={styles["btn-primary"]}  disabled={loading}>
+                <button
+                    type="submit"
+                    className={styles["btn-primary"]}
+                    disabled={loading}
+                >
                     {loading ? "Registering..." : "Register"}
                 </button>
 

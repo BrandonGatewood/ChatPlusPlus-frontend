@@ -1,20 +1,20 @@
 .layoutWrapper {
-  display: flex;
-  height: 100vh;           /* Lock to viewport height */
-  width: 100vw;
-  overflow: hidden;        /* Prevent outer scrollbars */
-  position: relative; 
+    display: flex;
+    height: 100vh; /* Lock to viewport height */
+    width: 100vw;
+    overflow: hidden; /* Prevent outer scrollbars */
+    position: relative;
 }
 
 .mainContent {
-  flex-grow: 1;
-  transition: margin-left 0.3s ease;
-  height: 100%;
-  overflow-y: auto;
+    flex-grow: 1;
+    transition: margin-left 0.3s ease;
+    height: 100%;
+    overflow-y: auto;
 }
 
 @media screen and (max-width: 768px) {
-  .mainShiftMobile {
-    margin-left: 250px;
-  }
+    .mainShiftMobile {
+        margin-left: 250px;
+    }
 }

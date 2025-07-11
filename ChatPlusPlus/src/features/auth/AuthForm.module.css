@@ -1,112 +1,113 @@
-html, body, #root {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
-
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .auth-container {
-  height: 100vh;
-  width: 100vw;
-  background-color: var(--color-primary-button);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--color-primary-button);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .auth-box {
-  background-color: white;
-  padding: 32px;
-  width: 100%;
-  max-width: 400px;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  font-family: sans-serif;
-  text-align: center;
+    background-color: white;
+    padding: 32px;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    font-family: sans-serif;
+    text-align: center;
 }
 
 .auth-box h2 {
-  margin-bottom: 24px;
-  color: var(--color-primary-button);
+    margin-bottom: 24px;
+    color: var(--color-primary-button);
 }
 
 .input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
 }
 
 .input:focus {
-  outline: none;
-  border-color: var(--color-primary-button);
+    outline: none;
+    border-color: var(--color-primary-button);
 }
 
 .auth-links {
-  margin-bottom: 16px;
+    margin-bottom: 16px;
 }
 
 .auth-links a,
 .toggle-text a {
-  color: var(--color-text-bg);
-  text-decoration: none;
+    color: var(--color-text-bg);
+    text-decoration: none;
 }
 
 .auth-links a {
-  font-size: 12px;
+    font-size: 12px;
 }
 
 .btn-primary {
-  background-color: var(--color-primary-button);
-  color: var(--color-white);
-  padding: 12px;
-  width: 100%;
-  border: none;
-  border-radius: 6px;
-  margin-top: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 14px;
+    background-color: var(--color-primary-button);
+    color: var(--color-white);
+    padding: 12px;
+    width: 100%;
+    border: none;
+    border-radius: 6px;
+    margin-top: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 .toggle-text {
-  font-size: 14px;
-  margin: 16px 0;
-  color: var(--color-secondary-text);
+    font-size: 14px;
+    margin: 16px 0;
+    color: var(--color-secondary-text);
 }
 
 .password-wrapper {
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
 }
 
 .password-wrapper input {
-  display: block;
-  width: 100%;
-  margin-bottom: 12px;
+    display: block;
+    width: 100%;
+    margin-bottom: 12px;
 }
 
 .toggle-password {
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-48%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-secondary-text);
-  font-size: 18px;
-  line-height: 1;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-48%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-secondary-text);
+    font-size: 18px;
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

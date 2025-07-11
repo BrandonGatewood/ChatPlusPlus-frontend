@@ -27,9 +27,8 @@ function handleApiError(err, fallbackMessage = "Something went wrong.") {
 
     if (status !== 401) {
         alert(detail);
-    } 
+    }
 }
-
 
 /**
  * Custom hook that encapsulates all chat management logic:
@@ -39,10 +38,10 @@ function handleApiError(err, fallbackMessage = "Something went wrong.") {
  * - Provides functions to start new chats and add messages
  */
 export default function useChatManager() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     // List of saved chats (excluding current draft)
     const [chats, setChats] = useState([]);
-    
+
     // Holds the active draft chat (before it gets saved to chats)
     const [draftChat, setDraftChat] = useState(createNewDraft);
 
@@ -56,16 +55,14 @@ export default function useChatManager() {
                 // If currentChatId equals draftChat.id, use draftChat directly (unsaved)
                 if (currentChatId === draftChat.id) {
                     setCurrentChat(draftChat);
-                }
-                else {
+                } else {
                     // Otherwise, fetch saved chat from backend by id
                     const res = await api.get(`/chats/${currentChatId}`);
                     setCurrentChat(res.data);
                 }
-            }
-            catch (err) {
+            } catch (err) {
                 handleApiError(err, "Failed to load chat.", navigate);
-                setCurrentChat(null); // optional 
+                setCurrentChat(null); // optional
             }
         }
 
@@ -79,75 +76,75 @@ export default function useChatManager() {
                 const res = await api.get("/chats");
                 setChats(res.data);
             } catch (err) {
-                handleApiError(err, "Failed to load chats.", navigate); 
+                handleApiError(err, "Failed to load chats.", navigate);
             }
         }
         fetchChats();
-    }, []); 
+    }, []);
 
-   
     /**
      * Adds a message to the current chat:
      * - If it's the first message in a draft, saves it as a new chat.
      * - Otherwise, appends the message to the existing chat.
-    */
-    const addMessageToCurrentChat = useCallback(async (message_request, files_request) => {
-        if (!currentChatId) return; // guard: no active chat selected
+     */
+    const addMessageToCurrentChat = useCallback(
+        async (message_request, files_request) => {
+            if (!currentChatId) return; // guard: no active chat selected
 
-        const formData = new FormData();
-        formData.append("message_request", message_request); 
+            const formData = new FormData();
+            formData.append("message_request", message_request);
 
-        files_request = files_request || [];
-        files_request.forEach((file) => {
-            formData.append("files_request", file);
-        });
-        // Save draftChat to the db 
-        if (
-            draftChat &&
-            currentChatId === draftChat.id &&
-            !chats.find((chat) => chat.id === draftChat.id)
-        ) {
-
-            try {
-                /*
+            files_request = files_request || [];
+            files_request.forEach((file) => {
+                formData.append("files_request", file);
+            });
+            // Save draftChat to the db
+            if (
+                draftChat &&
+                currentChatId === draftChat.id &&
+                !chats.find((chat) => chat.id === draftChat.id)
+            ) {
+                try {
+                    /*
                     this doesnt need full chat response either.
                 */
-                const res = await api.post("/chats/", formData);
-                
-                const chatTitle = {
-                    id: res.data.id,
-                    title: res.data.title
+                    const res = await api.post("/chats/", formData);
+
+                    const chatTitle = {
+                        id: res.data.id,
+                        title: res.data.title,
+                    };
+                    // Optimistically update chats with created chat from backend
+                    setChats((prev) => [chatTitle, ...prev]);
+                    setCurrentChatId(chatTitle.id);
+
+                    // Now open WebSocket for streaming LLM response using createdChat.id
+                    //openLLMWebSocket(createdChat.id);
+                } catch (err) {
+                    handleApiError(err, "Failed to send message.", navigate);
                 }
-                // Optimistically update chats with created chat from backend
-                setChats(prev => [chatTitle, ...prev]);
-                setCurrentChatId(chatTitle.id); 
+            } else {
+                try {
+                    const res = await api.post(
+                        `/chats/${currentChatId}`,
+                        formData
+                    );
 
-                // Now open WebSocket for streaming LLM response using createdChat.id
-                //openLLMWebSocket(createdChat.id);
-            }
-            catch(err) {
-                handleApiError(err, "Failed to send message.", navigate);
-            }
-        }
-        else {
-            try {
-                const res = await api.post(`/chats/${currentChatId}`, formData)
+                    const message_responses = res.data;
+                    setCurrentChat((prev) => ({
+                        ...prev,
+                        messages: [...prev.messages, ...message_responses],
+                    }));
 
-                const message_responses = res.data
-                setCurrentChat(prev => ({
-                    ...prev,
-                    messages: [...prev.messages, ...message_responses]
-                }));
-
-                // Now open WebSocket for streaming LLM response using createdChat.id
-                //openLLMWebSocket(createdChat.id);
+                    // Now open WebSocket for streaming LLM response using createdChat.id
+                    //openLLMWebSocket(createdChat.id);
+                } catch (err) {
+                    handleApiError(err, "Failed to send message.", navigate);
+                }
             }
-            catch(err) {
-                handleApiError(err, "Failed to send message.", navigate); 
-            }
-        }
-    }, [currentChatId, draftChat, chats, navigate]);
-
+        },
+        [currentChatId, draftChat, chats, navigate]
+    );
 
     /**
      * Starts a new chat by creating a new draft,
@@ -158,7 +155,6 @@ export default function useChatManager() {
         setDraftChat(newDraft);
         setCurrentChatId(newDraft.id);
     }, []);
-
 
     return {
         chats,

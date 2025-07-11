@@ -1,6 +1,6 @@
 .sidebar {
-  	display: flex;
-  	flex-direction: column;
+    display: flex;
+    flex-direction: column;
     position: fixed;
     left: -250px;
     height: 100vh;
@@ -16,18 +16,18 @@
 .menuButton {
     position: fixed;
     color: var(--color-icon);
-    top: 16px; 
+    top: 16px;
     left: 16px;
     background: none;
     border: none;
-    cursor: pointer; 
+    cursor: pointer;
 }
 
 .newChatIconContainer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 30px;
 }
 
 .chatsTitleContainer {
