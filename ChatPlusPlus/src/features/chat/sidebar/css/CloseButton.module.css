@@ -1,11 +1,12 @@
 .closeButtonContainer {
     margin-top: 16px;
-    padding-right: 16px; 
+    padding-right: 16px;
     width: 100%;
     height: 30px;
     display: flex;
     justify-content: flex-end;
 }
+
 .closeButton {
     display: flex;
     justify-content: center;
