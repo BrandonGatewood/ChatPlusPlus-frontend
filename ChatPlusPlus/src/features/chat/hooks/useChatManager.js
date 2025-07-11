@@ -157,15 +157,15 @@ export default function useChatManager() {
     }, []);
 
     const handleDelete = useCallback(
-        async (chat_id) => {
+        async (chatId) => {
             try {
-                await api.delete(`/chats/${chat_id}`);
-                if (chat_id === currentChatId) handleNewChat();
-                setChats((chats) =>
-                    chats.filter((chat) => chat.id !== chat_id)
+                await api.delete(`/chats/${chatId}`);
+                if (chatId === currentChatId) handleNewChat();
+                setChats((prevChats) =>
+                    prevChats.filter((chat) => chat.id !== chatId)
                 );
             } catch (err) {
-                handleApiError(err, "Failed to send message.", navigate);
+                handleApiError(err, "Failed to delete chat.", navigate);
             }
         },
         [currentChatId, handleNewChat]
