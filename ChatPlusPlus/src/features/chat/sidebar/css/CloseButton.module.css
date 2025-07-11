@@ -1,0 +1,17 @@
+.closeButtonContainer {
+    margin-top: 16px;
+    padding-right: 16px; 
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: flex-end;
+}
+.closeButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border: none;
+    color: var(--color-icon);
+    cursor: pointer;
+}

@@ -1,5 +1,5 @@
 import { FiX } from "react-icons/fi";
-import styles from "../css/Sidebar.module.css";
+import styles from "../css/CloseButton.module.css";
 
 export default function CloseButton({ onClick }) {
   return (
