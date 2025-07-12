@@ -1,5 +1,7 @@
+import { useState } from "react";
 import styles from "../css/ChatList.module.css";
 import { FiTrash } from "react-icons/fi";
+import Modal from "react-modal";
 
 export default function ChatList({
     chats,
@@ -7,7 +9,23 @@ export default function ChatList({
     onSelect,
     handleDelete,
 }) {
-    function handleUpload(id) {}
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [chatToDelete, setChatToDelete] = useState(null);
+
+    const openModal = (chatId) => {
+        setChatToDelete(chatId);
+        setModalIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setChatToDelete(null);
+        setModalIsOpen(false);
+    };
+
+    const confirmDelete = () => {
+        handleDelete(chatToDelete);
+        closeModal();
+    };
 
     return (
         <div className={styles.chatList}>
@@ -25,23 +43,46 @@ export default function ChatList({
                             className={styles.chatMoreButton}
                             onClick={(e) => {
                                 e.stopPropagation(); // prevent parent button click
-                                if (
-                                    window.confirm(
-                                        "Are you sure you want to delete this chat?"
-                                    )
-                                ) {
-                                    handleDelete(chat.id);
-                                }
+                                openModal(chat.id);
                             }}
                         >
-                            <FiTrash
-                                className={styles.chatMoreIcon}
-                                size={16}
-                            />
+                            <FiTrash className={styles.deleteIcon} size={16} />
                         </button>
                     </div>
                 </button>
             ))}
+            {/* Delete Confirmation Modal */}
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                className={styles.modalContent}
+                overlayClassName={styles.modalOverlay}
+                contentLabel="Delete Chat Confirmation"
+            >
+                <h2>Delete Chat?</h2>
+                <p>This action cannot be undone.</p>
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        gap: "1rem",
+                        marginTop: "1.5rem",
+                    }}
+                >
+                    <button
+                        onClick={closeModal}
+                        className={styles.cancelButton}
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={confirmDelete}
+                        className={styles.deleteButton}
+                    >
+                        Delete
+                    </button>
+                </div>
+            </Modal>
         </div>
     );
 }
