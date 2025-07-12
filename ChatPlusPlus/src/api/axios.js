@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -25,16 +26,17 @@ api.interceptors.response.use(
         if (status === 401 && token && !sessionExpiredHandled) {
             sessionExpiredHandled = true;
 
-            alert("Your session has expired. Please log in again.");
-            localStorage.removeItem("access_token");
+            toast.error("Your session has expired. Redirecting to login...", {
+                autoClose: 3000,
+                onClose: () => {
+                    localStorage.removeItem("access_token");
+                    window.location.href = "/login";
+                },
+            });
 
-            // Reload the page to reset the React state and trigger navigation
-            window.location.href = "/login";
-
-            // Optionally reset the flag in a second
             setTimeout(() => {
                 sessionExpiredHandled = false;
-            }, 1000);
+            }, 4000);
         }
 
         return Promise.reject(error);

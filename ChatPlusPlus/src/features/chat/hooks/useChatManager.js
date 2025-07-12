@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 import api from "../../../api/axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 /**
  * Utility function to create a new draft chat object
  * with a unique ID and a default welcome message.
@@ -29,8 +30,12 @@ function handleApiError(err, fallbackMessage = "Something went wrong.") {
         // Optional: Pretty print if it's an object
         detail = JSON.stringify(detail, null, 2);
     }
+
     if (status !== 401) {
-        alert(detail);
+        toast.error(detail, {
+            autoClose: 5000, // 5 seconds
+            pauseOnHover: true,
+        });
     }
 }
 
