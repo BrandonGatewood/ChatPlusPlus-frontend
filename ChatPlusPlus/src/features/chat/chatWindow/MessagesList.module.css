@@ -62,7 +62,7 @@
     width: 100%;
     flex-grow: 1;
     padding: 16px 16px 8px 16px;
-    border-radius: 20px;
+    border-radius: 28px;
     background-color: var(--color-input-bg);
     border: 1px solid var(--color-input-bg);
     color: var(--color-primary-text);
@@ -77,14 +77,13 @@
     display: flex;
     justify-content: end;
     gap: 20px;
-    padding-bottom: 16px;
-    padding-right: 16px;
+    padding: 16px;
 }
 
 .cancelButton {
     cursor: pointer;
     border-radius: 20px;
-    padding: 6px;
+    padding: 0.5rem 1rem;
     border: none;
 }
 
@@ -93,6 +92,6 @@
     border-radius: 20px;
     background: var(--color-primary-button);
     color: var(--color-primary-text);
-    padding: 6px;
+    padding: 0.5rem 1rem;
     border: none;
 }
