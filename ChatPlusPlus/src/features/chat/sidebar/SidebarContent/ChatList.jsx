@@ -39,7 +39,9 @@ export default function ChatList({
                 >
                     <div className={styles.chatItemContent}>
                         <h4 className={styles.chatItemTitle}>{chat.title}</h4>
-                        <button
+                        <div
+                            role="button"
+                            tabIndex={0}
                             className={styles.chatMoreButton}
                             onClick={(e) => {
                                 e.stopPropagation(); // prevent parent button click
@@ -47,7 +49,7 @@ export default function ChatList({
                             }}
                         >
                             <FiTrash className={styles.deleteIcon} size={16} />
-                        </button>
+                        </div>
                     </div>
                 </button>
             ))}
