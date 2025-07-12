@@ -18,6 +18,7 @@ export default function ChatWindow({
     addMessage,
     isOpen,
     setIsOpen,
+    handleEditMessage,
 }) {
     const [inputText, setInputText] = useState("");
     const [attachedFiles, setAttachedFiles] = useState([]);
@@ -74,7 +75,10 @@ export default function ChatWindow({
             <TopBar />
 
             <div className={styles.messages}>
-                <MessagesList messages={messages} />
+                <MessagesList
+                    messages={messages}
+                    handleEditMessage={handleEditMessage}
+                />
                 <div ref={messagesEndRef} />
             </div>
 

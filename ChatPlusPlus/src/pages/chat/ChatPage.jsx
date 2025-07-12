@@ -17,6 +17,7 @@ export default function ChatPage() {
         currentChat,
         addMessageToCurrentChat,
         handleDelete,
+        handleEditMessage,
     } = useChatManager();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -35,6 +36,7 @@ export default function ChatPage() {
                 addMessage={addMessageToCurrentChat}
                 isOpen={isSidebarOpen}
                 setIsOpen={setIsSidebarOpen}
+                handleEditMessage={handleEditMessage}
             />
         </MainLayout>
     );

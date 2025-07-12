@@ -23,8 +23,12 @@ function createNewDraft() {
 
 function handleApiError(err, fallbackMessage = "Something went wrong.") {
     const status = err?.response?.status;
-    const detail = err?.response?.data?.detail || fallbackMessage;
+    let detail = err?.response?.data?.detail || fallbackMessage;
 
+    if (typeof detail === "object") {
+        // Optional: Pretty print if it's an object
+        detail = JSON.stringify(detail, null, 2);
+    }
     if (status !== 401) {
         alert(detail);
     }
@@ -83,6 +87,31 @@ export default function useChatManager() {
     }, []);
 
     /**
+     * Starts a new chat by creating a new draft,
+     * setting it as the current chat.
+     */
+    const handleNewChat = useCallback(() => {
+        const newDraft = createNewDraft();
+        setDraftChat(newDraft);
+        setCurrentChatId(newDraft.id);
+    }, []);
+
+    const handleDelete = useCallback(
+        async (chatId) => {
+            try {
+                await api.delete(`/chats/${chatId}`);
+                if (chatId === currentChatId) handleNewChat();
+                setChats((prevChats) =>
+                    prevChats.filter((chat) => chat.id !== chatId)
+                );
+            } catch (err) {
+                handleApiError(err, "Failed to delete chat.", navigate);
+            }
+        },
+        [currentChatId, handleNewChat]
+    );
+
+    /**
      * Adds a message to the current chat:
      * - If it's the first message in a draft, saves it as a new chat.
      * - Otherwise, appends the message to the existing chat.
@@ -105,9 +134,6 @@ export default function useChatManager() {
                 !chats.find((chat) => chat.id === draftChat.id)
             ) {
                 try {
-                    /*
-                    this doesnt need full chat response either.
-                */
                     const res = await api.post("/chats/", formData);
 
                     const chatTitle = {
@@ -146,29 +172,41 @@ export default function useChatManager() {
         [currentChatId, draftChat, chats, navigate]
     );
 
-    /**
-     * Starts a new chat by creating a new draft,
-     * setting it as the current chat.
-     */
-    const handleNewChat = useCallback(() => {
-        const newDraft = createNewDraft();
-        setDraftChat(newDraft);
-        setCurrentChatId(newDraft.id);
-    }, []);
-
-    const handleDelete = useCallback(
-        async (chatId) => {
+    const handleEditMessage = useCallback(
+        async (messageId, editedMessageRequest) => {
             try {
-                await api.delete(`/chats/${chatId}`);
-                if (chatId === currentChatId) handleNewChat();
-                setChats((prevChats) =>
-                    prevChats.filter((chat) => chat.id !== chatId)
-                );
+                await api.post(`/chats/${currentChatId}/${messageId}`, {
+                    text: editedMessageRequest,
+                });
+
+                // Update local state to reflect changes
+                setCurrentChat((prev) => {
+                    const index = prev.messages.findIndex(
+                        (m) => m.id === messageId
+                    );
+                    if (index === -1) return prev;
+
+                    // Replace the edited message with the new content
+                    const updatedMessage = {
+                        ...prev.messages[index],
+                        text: editedMessageRequest,
+                    };
+
+                    // Keep everything up to and including the edited message
+                    const updatedMessages = [
+                        ...prev.messages.slice(0, index),
+                        updatedMessage,
+                    ];
+
+                    return {
+                        ...prev,
+                        messages: updatedMessages, // drops all messages after the edited one
+                    };
+                });
             } catch (err) {
-                handleApiError(err, "Failed to delete chat.", navigate);
+                handleApiError(err, "Failed to edit message.", navigate);
             }
-        },
-        [currentChatId, handleNewChat]
+        }
     );
 
     return {
@@ -180,5 +218,6 @@ export default function useChatManager() {
         handleNewChat,
         addMessageToCurrentChat,
         handleDelete,
+        handleEditMessage,
     };
 }
