@@ -3,6 +3,16 @@ import { v4 as uuidv4 } from "uuid";
 import api from "../../../api/axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import {
+    fetchChats,
+    fetchChatById,
+    createChat,
+    postMessage,
+    editMessage,
+    getBotResponse,
+    deleteChat,
+} from "./chatApi";
+
 /**
  * Utility function to create a new draft chat object
  * with a unique ID and a default welcome message.
@@ -27,84 +37,86 @@ function handleApiError(err, fallbackMessage = "Something went wrong.") {
     let detail = err?.response?.data?.detail || fallbackMessage;
 
     if (typeof detail === "object") {
-        // Optional: Pretty print if it's an object
         detail = JSON.stringify(detail, null, 2);
     }
 
     if (status !== 401) {
         toast.error(detail, {
-            autoClose: 5000, // 5 seconds
+            autoClose: 5000,
             pauseOnHover: true,
         });
     }
 }
 
-/**
- * Custom hook that encapsulates all chat management logic:
- * - Tracks list of saved chats
- * - Handles draft chats
- * - Manages current selected chat ID
- * - Provides functions to start new chats and add messages
- */
 export default function useChatManager() {
     const navigate = useNavigate();
-    // List of saved chats (excluding current draft)
+
+    const [draftChat, setDraftChat] = useState(createNewDraft);
+    //
     const [chats, setChats] = useState([]);
 
-    // Holds the active draft chat (before it gets saved to chats)
-    const [draftChat, setDraftChat] = useState(createNewDraft);
-
-    // Tracks which chat is currently open (either a draft or saved chat)
     const [currentChatId, setCurrentChatId] = useState(() => draftChat.id);
-    const [currentChat, setCurrentChat] = useState(null);
 
-    useEffect(() => {
-        async function fetchChatById(id) {
-            try {
-                // If currentChatId equals draftChat.id, use draftChat directly (unsaved)
-                if (currentChatId === draftChat.id) {
-                    setCurrentChat(draftChat);
-                } else {
-                    // Otherwise, fetch saved chat from backend by id
-                    const res = await api.get(`/chats/${currentChatId}`);
-                    setCurrentChat(res.data);
-                }
-            } catch (err) {
-                handleApiError(err, "Failed to load chat.", navigate);
-                setCurrentChat(null); // optional
-            }
-        }
+    const [currentChat, setCurrentChat] = useState(draftChat);
 
-        fetchChatById(currentChatId);
-    }, [currentChatId, draftChat.id]);
+    const [messageResponse, setMessageResponse] = useState("");
 
-    // Load chats from backend on mount
-    useEffect(() => {
-        async function fetchChats() {
-            try {
-                const res = await api.get("/chats");
-                setChats(res.data);
-            } catch (err) {
-                handleApiError(err, "Failed to load chats.", navigate);
-            }
-        }
-        fetchChats();
-    }, []);
+    const [isStreaming, setIsStreaming] = useState(false);
 
-    /**
-     * Starts a new chat by creating a new draft,
-     * setting it as the current chat.
-     */
     const handleNewChat = useCallback(() => {
         const newDraft = createNewDraft();
         setDraftChat(newDraft);
         setCurrentChatId(newDraft.id);
     }, []);
 
+    /*
+        fetch ChatResponse by id from db 
+
+        ChatReponse includes: id=UUID, title=str, messages=List[MessageResponse]
+        MessageResponse includes: id=UUID, sender=str, test=str
+    */
+    useEffect(() => {
+        async function getChatById(id) {
+            try {
+                if (currentChatId === draftChat.id) {
+                    setCurrentChat(draftChat);
+                } else {
+                    const chat = await fetchChatById(id);
+                    setCurrentChat(chat);
+                }
+            } catch (err) {
+                handleApiError(err, "Failed to load chat.", navigate);
+                setCurrentChat(null);
+            }
+        }
+
+        getChatById(currentChatId);
+    }, [currentChatId, draftChat.id]);
+
+    /*
+        Fetch List[ChatTitles] from db
+
+        ChatTitles include: id=UUID, title:str
+    */
+    useEffect(() => {
+        async function getChats() {
+            try {
+                const chatTitles = await fetchChats();
+                setChats(chatTitles);
+            } catch (err) {
+                handleApiError(err, "Failed to load chats.", navigate);
+            }
+        }
+        getChats();
+    }, []);
+
+    /*
+        delete chat by id from db.
+    */
     const handleDelete = useCallback(
         async (chatId) => {
             try {
-                await api.delete(`/chats/${chatId}`);
+                await deleteChat(chatId);
                 if (chatId === currentChatId) handleNewChat();
                 setChats((prevChats) =>
                     prevChats.filter((chat) => chat.id !== chatId)
@@ -116,88 +128,102 @@ export default function useChatManager() {
         [currentChatId, handleNewChat]
     );
 
-    /**
-     * Adds a message to the current chat:
-     * - If it's the first message in a draft, saves it as a new chat.
-     * - Otherwise, appends the message to the existing chat.
-     */
+    /*
+        adds a form to a new chat in db
+    */
+    const createNewChatAndSendMessage = async (formData) => {
+        try {
+            const newChat = await createChat(formData);
+
+            const chatTitle = {
+                id: newChat.id,
+                title: newChat.title,
+            };
+
+            setChats((prev) => [chatTitle, ...prev]);
+            setCurrentChatId(chatTitle.id);
+
+            /*
+
+                TEST: do i need setCurrentChat()
+                Do i need to return ChatResponse instead of ChatTitle??
+
+            */
+            openLLMWebSocket(chatTitle.id);
+        } catch (err) {
+            handleApiError(err, "Failed to send message.", navigate);
+        }
+    };
+
+    /*
+        adds a formdata message to chat in db. 
+        adds the MessageResponse to local memory to keep up w db without refetching
+
+        MessageResponse includes: id=UUID, sender=str, text=str
+    */
+    const sendMessageToExistingChat = async (chatId, formData) => {
+        try {
+            const message_responses = await postMessage(chatId, formData);
+
+            setCurrentChat((prev) => ({
+                ...prev,
+                messages: [...prev.messages, ...message_responses],
+            }));
+
+            openLLMWebSocket(chatId);
+        } catch (err) {
+            handleApiError(err, "Failed to send message.", navigate);
+            setIsStreaming(false);
+        }
+    };
+
     const addMessageToCurrentChat = useCallback(
         async (message_request, files_request) => {
-            if (!currentChatId) return; // guard: no active chat selected
+            if (!currentChatId) return;
+
+            setMessageResponse("");
+            setIsStreaming(true);
 
             const formData = new FormData();
             formData.append("message_request", message_request);
+            (files_request || []).forEach((file) =>
+                formData.append("files_request", file)
+            );
 
-            files_request = files_request || [];
-            files_request.forEach((file) => {
-                formData.append("files_request", file);
-            });
-            // Save draftChat to the db
-            if (
+            const isDraftNew =
                 draftChat &&
                 currentChatId === draftChat.id &&
-                !chats.find((chat) => chat.id === draftChat.id)
-            ) {
-                try {
-                    const res = await api.post("/chats/", formData);
+                !chats.find((chat) => chat.id === draftChat.id);
 
-                    const chatTitle = {
-                        id: res.data.id,
-                        title: res.data.title,
-                    };
-                    // Optimistically update chats with created chat from backend
-                    setChats((prev) => [chatTitle, ...prev]);
-                    setCurrentChatId(chatTitle.id);
-
-                    // Now open WebSocket for streaming LLM response using createdChat.id
-                    //openLLMWebSocket(createdChat.id);
-                } catch (err) {
-                    handleApiError(err, "Failed to send message.", navigate);
-                }
+            if (isDraftNew) {
+                await createNewChatAndSendMessage(formData);
             } else {
-                try {
-                    const res = await api.post(
-                        `/chats/${currentChatId}`,
-                        formData
-                    );
-
-                    const message_responses = res.data;
-                    setCurrentChat((prev) => ({
-                        ...prev,
-                        messages: [...prev.messages, ...message_responses],
-                    }));
-
-                    // Now open WebSocket for streaming LLM response using createdChat.id
-                    //openLLMWebSocket(createdChat.id);
-                } catch (err) {
-                    handleApiError(err, "Failed to send message.", navigate);
-                }
+                await sendMessageToExistingChat(currentChatId, formData);
             }
         },
-        [currentChatId, draftChat, chats, navigate]
+        [currentChatId, draftChat, chats, isStreaming, navigate]
     );
 
     const handleEditMessage = useCallback(
         async (messageId, editedMessageRequest) => {
             try {
-                await api.post(`/chats/${currentChatId}/${messageId}`, {
-                    text: editedMessageRequest,
-                });
+                await editMessage(
+                    currentChatId,
+                    messageId,
+                    editedMessageRequest
+                );
 
-                // Update local state to reflect changes
                 setCurrentChat((prev) => {
                     const index = prev.messages.findIndex(
                         (m) => m.id === messageId
                     );
                     if (index === -1) return prev;
 
-                    // Replace the edited message with the new content
                     const updatedMessage = {
                         ...prev.messages[index],
                         text: editedMessageRequest,
                     };
 
-                    // Keep everything up to and including the edited message
                     const updatedMessages = [
                         ...prev.messages.slice(0, index),
                         updatedMessage,
@@ -205,7 +231,7 @@ export default function useChatManager() {
 
                     return {
                         ...prev,
-                        messages: updatedMessages, // drops all messages after the edited one
+                        messages: updatedMessages,
                     };
                 });
             } catch (err) {
@@ -214,13 +240,132 @@ export default function useChatManager() {
         }
     );
 
+    /*
+        api: create an initial bot message with text="", returns MessageResponse
+
+        MessageResponse includes: id=UUID, sender=str, text=str
+    */
+    async function openLLMWebSocket(chatId) {
+        const access_token = localStorage.getItem("access_token");
+
+        try {
+            const botMessageResponse = await getBotResponse(chatId);
+            const message = botMessageResponse;
+
+            setCurrentChat((prev) => ({
+                ...prev,
+                messages: [...prev.messages, message],
+            }));
+
+            // Set initial messageResponse as the object
+            setMessageResponse(message);
+
+            const ws = new WebSocket(
+                `ws://localhost:8000/chat?chat_id=${chatId}&message_id=${botMessageResponse.id}`
+            );
+
+            ws.onopen = () => {
+                console.log("WebSocket connection opened");
+                ws.send(
+                    JSON.stringify({ type: "auth", access_token: access_token })
+                );
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+
+                    if (
+                        typeof data === "string" &&
+                        (data.startsWith("Authorization error") ||
+                            data.startsWith("Not found error") ||
+                            data.startsWith("Internal server error"))
+                    ) {
+                        alert(data);
+                        ws.close();
+                        return;
+                    }
+
+                    const chunk = data.text;
+
+                    setMessageResponse((prev) => {
+                        const updated = {
+                            ...prev,
+                            text: (prev.text || "") + chunk,
+                        };
+
+                        // Live update in chat
+                        setCurrentChat((prevChat) => {
+                            if (!prevChat || !prevChat.messages)
+                                return prevChat;
+
+                            const updatedMessages = prevChat.messages.map(
+                                (msg) =>
+                                    msg.id === updated.id
+                                        ? { ...msg, text: updated.text }
+                                        : msg
+                            );
+
+                            return {
+                                ...prevChat,
+                                messages: updatedMessages,
+                            };
+                        });
+
+                        return updated;
+                    });
+                } catch (err) {
+                    console.error(
+                        "Failed to parse WebSocket message:",
+                        event.data
+                    );
+                }
+            };
+
+            ws.onclose = (event) => {
+                console.log(
+                    `WebSocket connection closed: code=${event.code}, reason=${event.reason}`
+                );
+
+                setIsStreaming(false);
+
+                if (messageResponse.text?.trim()) {
+                    setCurrentChat((prev) => {
+                        if (!prev || !prev.messages) return prev;
+
+                        const updatedMessages = prev.messages.map((msg) =>
+                            msg.id === messageResponse.id
+                                ? { ...msg, text: messageResponse.text }
+                                : msg
+                        );
+
+                        return {
+                            ...prev,
+                            messages: updatedMessages,
+                        };
+                    });
+
+                    setMessageResponse(null);
+                }
+            };
+
+            ws.onerror = (error) => {
+                console.error("WebSocket error:", error);
+                setIsStreaming(false);
+            };
+
+            return ws;
+        } catch (err) {
+            handleApiError(err, "Failed to get bot response.", navigate);
+            setIsStreaming(false);
+        }
+    }
     return {
         chats,
-        draftChat,
         currentChatId,
-        currentChat,
         setCurrentChatId,
         handleNewChat,
+        currentChat,
         addMessageToCurrentChat,
         handleDelete,
         handleEditMessage,
