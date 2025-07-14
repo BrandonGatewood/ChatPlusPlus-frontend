@@ -14,7 +14,7 @@ function filterAllowedFiles(files) {
 }
 
 export default function ChatWindow({
-    messages,
+    currentChat,
     addMessage,
     isOpen,
     setIsOpen,
@@ -67,8 +67,10 @@ export default function ChatWindow({
     }
 
     useEffect(() => {
-        scrollMessagesToBottom();
-    }, [messages]);
+        if (currentChat?.messages?.length) {
+            scrollMessagesToBottom();
+        }
+    }, [currentChat.messages]);
 
     return (
         <div className={styles.chatMainContainer}>
@@ -76,7 +78,7 @@ export default function ChatWindow({
 
             <div className={styles.messages}>
                 <MessagesList
-                    messages={messages}
+                    messages={currentChat?.messages || []}
                     handleEditMessage={handleEditMessage}
                 />
                 <div ref={messagesEndRef} />
