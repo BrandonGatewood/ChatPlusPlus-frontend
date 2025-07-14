@@ -12,4 +12,9 @@
     --color-text-bg: #bb86fc;
     --color-white: #fff;
     --color-red: #ff0000;
+
+    .Toastify__toast--error {
+        background-color: var(--color-modal-bg) !important;
+        color: var(--color-primary-text) !important;
+    }
 }
