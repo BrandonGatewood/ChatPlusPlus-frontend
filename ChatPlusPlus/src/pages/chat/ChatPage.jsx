@@ -32,7 +32,7 @@ export default function ChatPage() {
             handleDelete={handleDelete}
         >
             <ChatWindow
-                messages={currentChat?.messages || []}
+                currentChat={currentChat}
                 addMessage={addMessageToCurrentChat}
                 isOpen={isSidebarOpen}
                 setIsOpen={setIsSidebarOpen}
