@@ -89,6 +89,7 @@ export function getChatHandlers({
 
                 return { ...prev, messages: updatedMessages };
             });
+            await openLLMWebsocket(currentChatId);
         } catch (err) {
             handleApiError(err, "Failed to edit message.", navigate);
         }
