@@ -106,7 +106,7 @@ export default function ChatWindow({
                 <textarea
                     id="chat-input"
                     name="chat-input"
-                    placeholder="Enter anything"
+                    placeholder="Ask anything"
                     ref={textareaRef}
                     value={inputText}
                     onChange={(e) => {
