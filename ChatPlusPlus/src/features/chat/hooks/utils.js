@@ -10,7 +10,7 @@ export function createNewDraft() {
             {
                 id: uuidv4(),
                 from: "bot",
-                text: "Please post the job posting and upload your resume.",
+                text: "What do you want to talk about today?",
             },
         ],
     };
