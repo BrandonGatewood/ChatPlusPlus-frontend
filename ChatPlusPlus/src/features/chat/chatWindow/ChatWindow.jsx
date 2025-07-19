@@ -19,6 +19,7 @@ export default function ChatWindow({
     isOpen,
     setIsOpen,
     handleEditMessage,
+    isStreaming,
 }) {
     const [inputText, setInputText] = useState("");
     const [attachedFiles, setAttachedFiles] = useState([]);
@@ -130,7 +131,8 @@ export default function ChatWindow({
                     aria-label="Send message"
                     disabled={
                         isSending ||
-                        (!inputText.trim() && attachedFiles.length === 0)
+                        (!inputText.trim() && attachedFiles.length === 0) ||
+                        isStreaming
                     }
                 >
                     <FiArrowUp size={24} />

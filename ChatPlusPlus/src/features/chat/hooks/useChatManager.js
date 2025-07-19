@@ -40,5 +40,6 @@ export default function useChatManager() {
         addMessageToCurrentChat,
         handleDelete,
         handleEditMessage,
+        isStreaming: state.isStreaming,
     };
 }

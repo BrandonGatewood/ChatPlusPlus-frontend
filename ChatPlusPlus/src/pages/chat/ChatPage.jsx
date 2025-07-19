@@ -18,6 +18,7 @@ export default function ChatPage() {
         addMessageToCurrentChat,
         handleDelete,
         handleEditMessage,
+        isStreaming,
     } = useChatManager();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -37,6 +38,7 @@ export default function ChatPage() {
                 isOpen={isSidebarOpen}
                 setIsOpen={setIsSidebarOpen}
                 handleEditMessage={handleEditMessage}
+                isStreaming={isStreaming}
             />
         </MainLayout>
     );
