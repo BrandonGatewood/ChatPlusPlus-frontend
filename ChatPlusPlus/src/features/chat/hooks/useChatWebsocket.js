@@ -1,6 +1,8 @@
 import { getBotResponse } from "./chatApi";
 import { handleApiError } from "./utils";
 
+const baseUrl = import.meta.env.VITE_WS_BASE_URL;
+
 export async function openLLMWebsocket(
     chatId,
     setCurrentChat,
@@ -22,7 +24,7 @@ export async function openLLMWebsocket(
         setMessageResponse(message);
 
         const ws = new WebSocket(
-            `ws://localhost:8000/chat?chat_id=${chatId}&message_id=${botMessageResponse.id}`
+            `${baseUrl}/chat?chat_id=${chatId}&message_id=${botMessageResponse.id}`
         );
 
         ws.onopen = () => {
