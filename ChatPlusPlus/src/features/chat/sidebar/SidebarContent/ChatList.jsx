@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "../css/ChatList.module.css";
 import { FiTrash } from "react-icons/fi";
 import Modal from "react-modal";
@@ -9,6 +10,7 @@ export default function ChatList({
     onSelect,
     handleDelete,
 }) {
+    const navigate = useNavigate();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [chatToDelete, setChatToDelete] = useState(null);
 
@@ -32,7 +34,10 @@ export default function ChatList({
             {chats.map((chat) => (
                 <button
                     key={chat.id}
-                    onClick={() => onSelect(chat.id)}
+                    onClick={() => {
+                        onSelect(chat.id);
+                        navigate(`/chats/${chat.id}`);
+                    }}
                     className={`${styles.chatItemButton} ${
                         chat.id === currentChatId ? styles.active : ""
                     }`}

@@ -1,4 +1,5 @@
 import { FiMenu } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import styles from "./css/SidebarDesktop.module.css";
 import CloseButton from "./SidebarContent/ClosedButton";
 import NewChatButton from "./SidebarContent/NewChatButton";
@@ -14,7 +15,12 @@ export default function SidebarDesktop({
     handleDelete,
 }) {
     const toggleSidebar = () => setIsOpen((prev) => !prev);
+    const navigate = useNavigate();
 
+    const onNewChatHandler = () => {
+        onNewChat();
+        navigate("/chats");
+    };
     return (
         <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
             {!isOpen && (
@@ -30,7 +36,7 @@ export default function SidebarDesktop({
             {!isOpen && (
                 <NewChatButton
                     onClick={() => {
-                        onNewChat();
+                        onNewChatHandler();
                         setIsOpen(false);
                     }}
                     iconClass={`${styles.newChatIconContainer} ${styles.open}`}
@@ -44,7 +50,7 @@ export default function SidebarDesktop({
 
                     <NewChatButton
                         onClick={() => {
-                            onNewChat();
+                            onNewChatHandler();
                             setIsOpen(false);
                         }}
                         iconClass={`${styles.newChatIconContainer} ${styles.open}`}

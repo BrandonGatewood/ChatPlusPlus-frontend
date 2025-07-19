@@ -1,4 +1,5 @@
 import { FiMenu } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import styles from "./css/SidebarMobile.module.css";
 import CloseButton from "./SidebarContent/ClosedButton";
 import NewChatButton from "./SidebarContent/NewChatButton";
@@ -14,7 +15,12 @@ export default function SidebarMobile({
     handleDelete,
 }) {
     const toggleSidebar = () => setIsOpen((prev) => !prev);
+    const navigate = useNavigate();
 
+    const onNewChatHandler = () => {
+        onNewChat();
+        navigate("/chats");
+    };
     return (
         <>
             {!isOpen && (
@@ -27,7 +33,7 @@ export default function SidebarMobile({
                 <CloseButton onClick={toggleSidebar} />
                 <NewChatButton
                     onClick={() => {
-                        onNewChat();
+                        onNewChatHandler();
                         setIsOpen(false);
                     }}
                     iconClass={styles.newChatIconContainer}
