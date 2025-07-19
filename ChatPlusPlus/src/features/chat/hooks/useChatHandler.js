@@ -21,6 +21,7 @@ export function getChatHandlers({
             const newChat = await createChat(formData);
             const chatTitle = { id: newChat.id, title: newChat.title };
 
+            navigate(`/chats/${newChat.id}`);
             setChats((prev) => [chatTitle, ...prev]);
             setCurrentChatId(chatTitle.id);
             await openLLMWebsocket(chatTitle.id);
