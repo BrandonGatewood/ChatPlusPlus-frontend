@@ -17,4 +17,10 @@
         background-color: var(--color-modal-bg) !important;
         color: var(--color-primary-text) !important;
     }
+
+    input,
+    textarea,
+    select {
+        font-size: 16px !important;
+    }
 }

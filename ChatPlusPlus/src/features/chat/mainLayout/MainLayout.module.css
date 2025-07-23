@@ -1,6 +1,6 @@
 .layoutWrapper {
     display: flex;
-    height: 100vh; /* Lock to viewport height */
+    height: 100%; /* Lock to viewport height */
     width: 100vw;
     overflow: hidden; /* Prevent outer scrollbars */
     position: relative;
@@ -17,4 +17,8 @@
     .mainShiftMobile {
         margin-left: 250px;
     }
+}
+
+body {
+    background-color: var(--color-bg);
 }
